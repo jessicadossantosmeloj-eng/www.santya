@@ -20,3 +20,103 @@ body {
 button {
   cursor: pointer;
 }
+
+.santya-marquee-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  animation: santyaPreviewSlide 34s linear infinite;
+}
+
+.santya-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.santya-preview-screen {
+  width: 720px;
+  max-width: calc(100vw - 72px);
+  flex: 0 0 auto;
+}
+
+@keyframes santyaPreviewSlide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-50% - 6px), 0, 0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .santya-marquee-track {
+    animation-duration: 40s;
+  }
+
+  .santya-preview-screen {
+    width: 620px;
+    max-width: calc(100vw - 56px);
+  }
+}
+
+@media (max-width: 640px) {
+  .santya-marquee-track {
+    gap: 10px;
+    animation-duration: 44s;
+  }
+
+  .santya-preview-screen {
+    width: 520px;
+    max-width: calc(100vw - 42px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .santya-marquee-track {
+    animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+.santya-mobile-marquee-track {
+  display: flex;
+  gap: 12px;
+  width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  animation: santyaMobileSlide 24s linear infinite;
+}
+
+.santya-mobile-preview {
+  width: 336px;
+  flex: 0 0 auto;
+}
+
+@keyframes santyaMobileSlide {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-50% - 5px), 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .santya-mobile-marquee-track {
+    animation: none;
+  }
+}
+
+
+@media (max-width: 480px) {
+  .santya-mobile-preview {
+    width: min(336px, calc(100vw - 30px));
+  }
+}
