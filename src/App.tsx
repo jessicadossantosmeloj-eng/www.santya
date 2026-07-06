@@ -1227,14 +1227,14 @@ export default function App() {
           </div>
         </section>
 
-        <section id="demonstracao" className="max-w-7xl mx-auto px-4 md:px-6 pb-20 pt-8 text-white">
+        <section id="demonstracao" className="max-w-7xl mx-auto px-4 md:px-6 pb-12 pt-8 text-white">
           <div className="rounded-[36px] border border-white/20 overflow-hidden shadow-[0_24px_80px_rgba(22,37,61,0.12)]">
             <div className="grid lg:grid-cols-[1fr_0.85fr]">
               <div className="p-8 md:p-12" style={{ background: 'linear-gradient(135deg, #314C74, #20324E)' }}>
                 <div className="text-xs uppercase tracking-[0.3em]" style={{ color: goldSoft }}>Demonstração</div>
                 <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight">Veja como a Santya conecta sua operação na prática.</h2>
                 <p className="mt-5 text-white/82 max-w-2xl leading-7">Solicite uma demonstração da Plataforma ERP Inteligente e descubra como integrar comercial, contratos, clientes, financeiro e diretoria com mais controle, automação e visão real.</p>
-                <div className="mt-8 flex flex-wrap gap-4">
+                <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Button className="rounded-2xl px-7 text-[#1b1205] font-semibold" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('contato')}>
                     Solicitar demonstração
                   </Button>
@@ -1246,7 +1246,7 @@ export default function App() {
 
               <div id="contato" className="p-8 md:p-12 flex flex-col justify-center" style={{ background: slateDeep }}>
                 <div className="text-white/60 text-sm uppercase tracking-[0.24em]">O que você vai conhecer</div>
-                <div className="mt-6 space-y-4">
+                <div className="mt-5 space-y-3">
                   {[
                     'Plataforma ERP Inteligente',
                     'CRM, agenda, tarefas, fechamentos e diretoria',
@@ -1254,7 +1254,7 @@ export default function App() {
                     'Inadimplência, automações, WhatsApp, notificações e PWA',
                     'Pronto para empresas que precisam de controle, escala e profissionalismo',
                   ].map((item) => (
-                    <div key={item} className="rounded-2xl border border-white/15 bg-white/[0.04] p-4 text-white/82 leading-7">{item}</div>
+                    <div key={item} className="rounded-2xl border border-white/15 bg-white/[0.04] px-4 py-3.5 text-white/82 leading-6">{item}</div>
                   ))}
                 </div>
                 <div className="mt-8 flex flex-wrap gap-3">
@@ -1271,62 +1271,62 @@ export default function App() {
         </section>
 
         <footer className="max-w-7xl mx-auto px-4 md:px-6 pb-12 pt-4">
-          <div className="rounded-[32px] border border-white/20 bg-[rgba(244,237,226,0.92)] backdrop-blur-sm shadow-[0_16px_55px_rgba(22,37,61,0.08)] p-8 md:p-10">
-            <div className="grid md:grid-cols-[0.9fr_1.1fr] xl:grid-cols-[0.7fr_1.3fr] gap-10">
-              <div>
+          <div className="rounded-[32px] border border-white/20 bg-[rgba(244,237,226,0.92)] backdrop-blur-sm shadow-[0_16px_55px_rgba(22,37,61,0.08)] p-8 md:p-10 xl:p-12">
+            <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+              <div className="flex min-w-0 flex-col items-center text-center">
                 <SantyaBrand size="md" />
-                <div className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: gold }}>Soluções empresariais inteligentes</div>
-                <p className="mt-6 max-w-md leading-7" style={{ color: textMuted }}>Plataforma ERP Inteligente para conectar gestão comercial, financeira e operacional, com automação, diretoria em tempo real e suporte humanizado.</p>
+                <div className="mt-3 text-[10px] font-semibold uppercase tracking-[0.28em]" style={{ color: gold }}>Soluções empresariais inteligentes</div>
+                <p className="mt-5 max-w-sm text-center leading-7" style={{ color: textMuted }}>Plataforma ERP Inteligente para conectar gestão comercial, financeira e operacional, com automação, diretoria em tempo real e suporte humanizado.</p>
               </div>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 break-words">
-                <div>
-                  <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Plataforma</div>
-                  <div className="space-y-3 text-sm" style={{ color: textMuted }}>
-                    <button className="block text-left" onClick={() => scrollToId('resource-0')}>CRM e Leads</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-1')}>Agenda e Tarefas</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-2')}>Fechamentos</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-3')}>Contratos e Assinaturas</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-5')}>Financeiro</button>
+              <div className="grid min-w-0 gap-9 break-words sm:grid-cols-2 xl:grid-cols-4">
+                <div className="min-w-0">
+                  <div className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: textDark }}>Plataforma</div>
+                  <div className="space-y-3.5 text-sm" style={{ color: textMuted }}>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-0')}>CRM e Leads</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-1')}>Agenda e Tarefas</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-2')}>Fechamentos</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-3')}>Contratos e Assinaturas</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-5')}>Financeiro</button>
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Recursos</div>
-                  <div className="space-y-3 text-sm" style={{ color: textMuted }}>
-                    <button className="block text-left" onClick={() => scrollToId('resource-4')}>Clientes</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-6')}>Boletos e Baixas</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-7')}>Inadimplência</button>
-                    <button className="block text-left" onClick={() => scrollToId('beneficios')}>Automações e WhatsApp</button>
-                    <button className="block text-left" onClick={() => scrollToId('beneficios')}>PWA para PC e Celular</button>
+                <div className="min-w-0">
+                  <div className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: textDark }}>Recursos</div>
+                  <div className="space-y-3.5 text-sm" style={{ color: textMuted }}>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-4')}>Clientes</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-6')}>Boletos e Baixas</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-7')}>Inadimplência</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('resource-11')}>Automações e WhatsApp</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('beneficios')}>PWA para PC e Celular</button>
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Navegação</div>
-                  <div className="space-y-3 text-sm" style={{ color: textMuted }}>
-                    <button className="block text-left" onClick={() => scrollToId('topo')}>Início</button>
-                    <button className="block text-left" onClick={() => scrollToId('plataforma')}>Plataforma</button>
-                    <button className="block text-left" onClick={() => scrollToId('recursos')}>Recursos</button>
-                    <button className="block text-left" onClick={() => scrollToId('demonstracao')}>Demonstração</button>
-                    <button className="block text-left" onClick={() => handleCta('url', loginUrl)}>Entrar no sistema</button>
+                <div className="min-w-0">
+                  <div className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: textDark }}>Navegação</div>
+                  <div className="space-y-3.5 text-sm" style={{ color: textMuted }}>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('topo')}>Início</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('plataforma')}>Plataforma</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('recursos')}>Recursos</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('demonstracao')}>Demonstração</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => handleCta('url', loginUrl)}>Entrar no sistema</button>
                   </div>
                 </div>
-                <div>
-                  <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Contato</div>
-                  <div className="space-y-3 text-sm" style={{ color: textMuted }}>
-                    <button className="block text-left" onClick={() => scrollToId('contato')}>WhatsApp comercial</button>
-                    <button className="block text-left break-all" onClick={() => window.location.href = 'mailto:contato@santya.com.br'}>contato@santya.com.br</button>
-                    <button className="block text-left" onClick={() => scrollToId('demonstracao')}>Solicitar demonstração</button>
-                    <button className="block text-left" onClick={() => scrollToId('contato')}>Política de privacidade</button>
-                    <button className="block text-left" onClick={() => scrollToId('contato')}>Termos de uso</button>
+                <div className="min-w-0">
+                  <div className="mb-5 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ color: textDark }}>Contato</div>
+                  <div className="space-y-3.5 text-sm" style={{ color: textMuted }}>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('contato')}>WhatsApp comercial</button>
+                    <button className="block break-all text-left transition-colors hover:text-[#B8742A]" onClick={() => window.location.href = 'mailto:contato@santya.com.br'}>contato@santya.com.br</button>
+                    <button className="block text-left transition-colors hover:text-[#B8742A]" onClick={() => scrollToId('demonstracao')}>Solicitar demonstração</button>
+                    <a className="block text-left transition-colors hover:text-[#B8742A]" href="/privacidade">Política de privacidade</a>
+                    <a className="block text-left transition-colors hover:text-[#B8742A]" href="/termos">Termos de uso</a>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="mt-10 pt-6 border-t border-slate-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm">
+            <div className="mt-12 flex flex-col items-center gap-5 border-t border-slate-200 pt-7 text-center text-sm md:flex-row md:justify-between md:text-left">
               <div style={{ color: textMuted }}>© 2026 Santya. Todos os direitos reservados.</div>
-              <div className="flex flex-wrap items-center gap-5" style={{ color: textMuted }}>
-                <button onClick={() => scrollToId('contato')}>Política de Privacidade</button>
-                <button onClick={() => scrollToId('contato')}>Termos de Uso</button>
-                <button onClick={() => scrollToId('contato')} style={{ color: gold }}>Fale Conosco</button>
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 md:justify-end" style={{ color: textMuted }}>
+                <a className="transition-colors hover:text-[#B8742A]" href="/privacidade">Política de Privacidade</a>
+                <a className="transition-colors hover:text-[#B8742A]" href="/termos">Termos de Uso</a>
+                <button className="transition-opacity hover:opacity-75" onClick={() => scrollToId('contato')} style={{ color: gold }}>Fale Conosco</button>
               </div>
             </div>
           </div>
