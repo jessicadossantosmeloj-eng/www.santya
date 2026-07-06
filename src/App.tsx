@@ -1,24 +1,33 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, animate, motion, useMotionValue, useMotionValueEvent } from 'framer-motion';
 import {
   ArrowUpRight,
-  BellRing,
+  BadgeAlert,
+  Bell,
   BrainCircuit,
   Building2,
   CalendarDays,
+  ChartNoAxesCombined,
   ChevronDown,
   ChevronRight,
-  ClipboardCheck,
+  CircleDollarSign,
   Crown,
+  FileSignature,
+  Home,
   LayoutDashboard,
+  LogOut,
   Menu,
-  MessageCircleMore,
   MonitorSmartphone,
+  ReceiptText,
+  Settings2,
   ShieldCheck,
   Sparkles,
   Target,
+  UserRoundCheck,
   Users2,
+  WalletCards,
   X,
+  Zap,
 } from 'lucide-react';
 import { Button } from './components/ui/button';
 import { Card, CardContent } from './components/ui/card';
@@ -56,28 +65,28 @@ const menuItems = [
 
 const heroSlides = [
   {
-    eyebrow: 'SANTYA • SISTEMA COMERCIAL PREMIUM',
-    title: 'Sistema comercial completo para empresas que querem mais controle, automação e resultado.',
+    eyebrow: 'SANTYA • PLATAFORMA ERP INTELIGENTE',
+    title: 'ERP inteligente para empresas que precisam controlar vendas, contratos, financeiro e operação.',
     text:
-      'CRM, agenda, tarefas, fechamentos, dashboard executivo, notificações no sistema, alertas no WhatsApp e acesso via PWA em uma experiência premium pensada para vender seu sistema com autoridade.',
+      'A Santya centraliza CRM, agenda, tarefas, fechamentos, contratos, clientes, financeiro, boletos, baixas, inadimplência, diretoria, notificações e automações em uma plataforma premium, simples de usar e pronta para escalar.',
     primary: { label: 'Solicitar demonstração', type: 'scroll', value: 'demonstracao' },
     secondary: { label: 'Entrar no sistema', type: 'url', value: loginUrl },
   },
   {
-    eyebrow: 'OPERAÇÃO + GESTÃO + DIRETORIA',
-    title: 'Uma plataforma para organizar a rotina comercial do lead ao fechamento.',
+    eyebrow: 'GESTÃO COMERCIAL, FINANCEIRA E OPERACIONAL',
+    title: 'Uma operação completa, conectada do lead ao financeiro.',
     text:
-      'Menos improviso, mais acompanhamento, mais visão para gestores e mais segurança para a diretoria com dados claros e operação centralizada.',
+      'Comercial, contratos, clientes e financeiro trabalham no mesmo fluxo, enquanto gestores e diretoria acompanham metas, pendências e resultados em tempo real.',
     primary: { label: 'Conhecer a plataforma', type: 'scroll', value: 'plataforma' },
     secondary: { label: 'Ver recursos', type: 'scroll', value: 'recursos' },
   },
   {
-    eyebrow: 'MOVIMENTO + SOFISTICAÇÃO + CONFIANÇA',
-    title: 'Seu site principal precisa mostrar valor, clareza e presença de marca.',
+    eyebrow: 'AUTOMAÇÃO + ESCALA + VISÃO GERENCIAL',
+    title: 'ERP empresarial com experiência premium e simples de usar.',
     text:
-      'A Santya vende controle da operação, inteligência comercial, mobilidade e suporte humanizado em uma linguagem visual moderna e premium.',
-    primary: { label: 'Quero essa versão', type: 'scroll', value: 'demonstracao' },
-    secondary: { label: 'Explorar conceito', type: 'scroll', value: 'solucoes' },
+      'Organize processos, reduza tarefas manuais e dê ao time a clareza necessária para executar melhor, com acesso seguro no computador ou no celular.',
+    primary: { label: 'Ver a Santya na prática', type: 'scroll', value: 'demonstracao' },
+    secondary: { label: 'Explorar módulos', type: 'scroll', value: 'plataforma' },
   },
 ];
 
@@ -85,44 +94,80 @@ const completeSystemCards = [
   {
     icon: Users2,
     title: 'CRM e Leads',
-    text: 'Carteira organizada, histórico, acompanhamento e visão de status para a jornada comercial.',
+    text: 'Centralize oportunidades, histórico, funil, responsáveis e próximos passos da jornada comercial.',
     target: 'resource-0',
   },
   {
-    icon: ClipboardCheck,
-    title: 'Tarefas Comerciais',
-    text: 'Controle de atividades, responsáveis, prazos, pendências e disciplina operacional.',
-    target: 'resource-2',
-  },
-  {
     icon: CalendarDays,
-    title: 'Agenda e Compromissos',
-    text: 'Plantões, visitas, rotina diária e agenda comercial individual ou compartilhada.',
+    title: 'Agenda e Tarefas',
+    text: 'Organize compromissos, visitas, responsáveis, prazos e pendências de cada equipe.',
     target: 'resource-1',
   },
   {
     icon: Target,
     title: 'Fechamentos',
     text: 'Acompanhamento de andamento, previsão, status e evolução comercial com mais clareza.',
-    target: 'solucoes',
+    target: 'resource-2',
   },
   {
-    icon: LayoutDashboard,
-    title: 'Painel da Diretoria',
-    text: 'Indicadores e visão consolidada da operação para decisões mais bem orientadas.',
+    icon: FileSignature,
+    title: 'Contratos e Assinaturas',
+    text: 'Acompanhe contratos, status de assinatura, pendências, documentos e etapas críticas do fechamento.',
     target: 'resource-3',
   },
   {
-    icon: BellRing,
-    title: 'Notificações no Sistema',
-    text: 'Avisos para tarefas, leads, compromissos e atualizações importantes da operação.',
+    icon: UserRoundCheck,
+    title: 'Clientes',
+    text: 'Centralize compradores, histórico, contratos, unidades, parcelas e relacionamento em uma base organizada.',
+    target: 'resource-4',
+  },
+  {
+    icon: WalletCards,
+    title: 'Financeiro',
+    text: 'Contas a receber, parcelas, vencimentos, status de pagamento e visão financeira integrada à operação.',
+    target: 'resource-5',
+  },
+  {
+    icon: ReceiptText,
+    title: 'Boletos e Baixas',
+    text: 'Emissão de boletos, pagamentos, baixas automáticas e manuais, conciliação e histórico em um só fluxo.',
+    target: 'resource-6',
+  },
+  {
+    icon: BadgeAlert,
+    title: 'Inadimplência',
+    text: 'Identifique parcelas vencidas, clientes em atraso e pendências com leitura simples, rápida e gerencial.',
+    target: 'resource-7',
+  },
+  {
+    icon: ChartNoAxesCombined,
+    title: 'Diretoria e BI',
+    text: 'Metas, ranking, performance e indicadores consolidados para a diretoria em tempo real.',
+    target: 'resource-8',
+  },
+  {
+    icon: Home,
+    title: 'Empreendimentos',
+    text: 'Organize empreendimentos, unidades, disponibilidade, contratos e a visão comercial da operação.',
+    target: 'resource-9',
+  },
+  {
+    icon: Building2,
+    title: 'Área do Corretor',
+    text: 'Ofereça uma experiência profissional para corretores acompanharem oportunidades e processos.',
+    target: 'resource-10',
+  },
+  {
+    icon: Settings2,
+    title: 'Configurações e Permissões',
+    text: 'Defina acessos, perfis, regras e parâmetros para cada área trabalhar com mais segurança.',
     target: 'beneficios',
   },
   {
-    icon: MessageCircleMore,
-    title: 'Alertas no WhatsApp',
-    text: 'Comunicação rápida para eventos relevantes sem excesso de ruído no dia a dia.',
-    target: 'demonstracao',
+    icon: Zap,
+    title: 'Automações e WhatsApp',
+    text: 'Automatize avisos, notificações e comunicações importantes sem perder o contexto da operação.',
+    target: 'resource-11',
   },
   {
     icon: MonitorSmartphone,
@@ -134,124 +179,165 @@ const completeSystemCards = [
 
 const featureDetails = [
   {
-    eyebrow: 'CRM E GESTÃO DE LEADS',
-    title: 'Controle a jornada comercial desde a entrada do lead.',
-    text: 'Cadastro organizado, histórico de movimentações, visão por status, ações do time e acompanhamento mais disciplinado da evolução comercial.',
-    bullets: ['Histórico centralizado', 'Jornada por status', 'Mais controle comercial'],
+    eyebrow: 'COMERCIAL',
+    title: 'CRM e Leads',
+    detailTitle: 'Controle a jornada comercial desde a entrada do lead.',
+    text: 'Organize funil, histórico, origem, status, responsáveis e próximos passos.',
+    bullets: ['Histórico centralizado', 'Funil por status', 'Acompanhamento comercial'],
+    flow: ['Lead recebido', 'Atendimento', 'Fechamento'],
     icon: Users2,
   },
   {
-    eyebrow: 'AGENDA COMERCIAL',
-    title: 'Mais organização para compromissos, plantões, visitas e rotina diária.',
-    text: 'A Santya ajuda a estruturar a agenda por usuário e por equipe, reduzindo ruído e melhorando a execução comercial.',
-    bullets: ['Agenda individual', 'Rotina por equipe', 'Compromissos do dia'],
+    eyebrow: 'ROTINA',
+    title: 'Agenda e Tarefas',
+    detailTitle: 'Organize visitas, prazos e responsabilidades.',
+    text: 'Controle compromissos, tarefas, retornos, visitas e atividades da equipe.',
+    bullets: ['Prazos claros', 'Responsáveis definidos', 'Rotina acompanhada'],
+    flow: ['Tarefa criada', 'Prazo definido', 'Execução'],
     icon: CalendarDays,
   },
   {
-    eyebrow: 'TAREFAS E EXECUÇÃO',
-    title: 'Acompanhe responsáveis, prazos e pendências com clareza.',
-    text: 'Menos perda de contexto e mais disciplina operacional para o time comercial agir no momento certo.',
-    bullets: ['Prazos visíveis', 'Responsáveis definidos', 'Execução acompanhada'],
-    icon: ClipboardCheck,
+    eyebrow: 'RESULTADO',
+    title: 'Fechamentos',
+    detailTitle: 'Acompanhe negociações até o resultado final.',
+    text: 'Veja evolução, status, valores e previsões de fechamento.',
+    bullets: ['Pipeline claro', 'Valor negociado', 'Resultado visível'],
+    flow: ['Negociação', 'Aprovação', 'Fechamento'],
+    icon: Target,
   },
   {
-    eyebrow: 'DIRETORIA E GESTÃO',
-    title: 'Visão executiva da operação comercial em uma experiência premium.',
-    text: 'Leitura mais estratégica da operação, gargalos mais visíveis e acompanhamento por gestor e time.',
-    bullets: ['Leitura executiva', 'Indicadores claros', 'Acompanhamento consolidado'],
-    icon: Crown,
+    eyebrow: 'CONTRATOS',
+    title: 'Contratos e Assinaturas',
+    detailTitle: 'Do fechamento à assinatura digital.',
+    text: 'Controle contratos, pendências, documentos e assinatura digital.',
+    bullets: ['Documentos', 'Clicksign', 'Pendências'],
+    flow: ['Contrato', 'Assinatura', 'Finalização'],
+    icon: FileSignature,
+  },
+  {
+    eyebrow: 'RELACIONAMENTO',
+    title: 'Clientes',
+    detailTitle: 'Uma base completa para compradores e clientes.',
+    text: 'Centralize cadastro, documentos, contratos, unidades e histórico financeiro.',
+    bullets: ['Cadastro completo', 'Histórico', 'Financeiro do cliente'],
+    flow: ['Cliente', 'Contratos', 'Parcelas'],
+    icon: UserRoundCheck,
+  },
+  {
+    eyebrow: 'FINANCEIRO',
+    title: 'Financeiro',
+    detailTitle: 'Controle financeiro conectado à operação.',
+    text: 'Acompanhe contas a receber, parcelas, vencimentos e recebimentos.',
+    bullets: ['Contas a receber', 'Vencimentos', 'Movimento financeiro'],
+    flow: ['Parcela', 'Pagamento', 'Baixa'],
+    icon: CircleDollarSign,
+  },
+  {
+    eyebrow: 'RECEBIMENTOS',
+    title: 'Boletos e Baixas',
+    detailTitle: 'Boletos, pagamentos e baixas em um só fluxo.',
+    text: 'Controle emissão, status, pagamentos, baixas manuais e automáticas.',
+    bullets: ['Boletos', 'Baixas', 'Conciliação'],
+    flow: ['Boleto', 'Pagamento', 'Baixa'],
+    icon: ReceiptText,
+  },
+  {
+    eyebrow: 'COBRANÇA',
+    title: 'Inadimplência',
+    detailTitle: 'Identifique atrasos com leitura simples e gerencial.',
+    text: 'Veja parcelas vencidas, clientes em atraso e pendências financeiras.',
+    bullets: ['Parcelas vencidas', 'Clientes em atraso', 'Cobrança'],
+    flow: ['Vencimento', 'Alerta', 'Regularização'],
+    icon: BadgeAlert,
+  },
+  {
+    eyebrow: 'GESTÃO',
+    title: 'Diretoria e BI',
+    detailTitle: 'Indicadores para decisão em tempo real.',
+    text: 'Acompanhe metas, ranking, vendas, visitas, fechamentos e performance.',
+    bullets: ['Metas', 'Ranking', 'Indicadores'],
+    flow: ['Dados', 'Dashboard', 'Decisão'],
+    icon: ChartNoAxesCombined,
+  },
+  {
+    eyebrow: 'OPERAÇÃO',
+    title: 'Empreendimentos',
+    detailTitle: 'Organize empreendimentos e unidades em uma visão única.',
+    text: 'Controle unidades, disponibilidade, vínculo com contratos e visão comercial.',
+    bullets: ['Unidades', 'Disponibilidade', 'Reservas'],
+    flow: ['Empreendimento', 'Unidade', 'Venda'],
+    icon: Home,
+  },
+  {
+    eyebrow: 'CORRETORES',
+    title: 'Área do Corretor',
+    detailTitle: 'Uma experiência profissional para parceiros e corretores.',
+    text: 'Ofereça informações, oportunidades e processos acompanhados.',
+    bullets: ['Informação centralizada', 'Oportunidades', 'Processos'],
+    flow: ['Acesso', 'Consulta', 'Acompanhamento'],
+    icon: Building2,
+  },
+  {
+    eyebrow: 'AUTOMAÇÃO',
+    title: 'Automações',
+    detailTitle: 'Menos trabalho manual e mais controle.',
+    text: 'Use notificações, WhatsApp, alertas e automações para reduzir retrabalho.',
+    bullets: ['WhatsApp', 'Notificações', 'Alertas'],
+    flow: ['Evento', 'Automação', 'Aviso'],
+    icon: Zap,
   },
 ];
 
 const benefits = [
-  'Menos perda de oportunidade',
-  'Rotina comercial mais organizada',
-  'Equipe mais acompanhada',
-  'Mais controle para gestores',
-  'Mais segurança para diretoria',
-  'Menos ruído operacional',
+  'Operação comercial, financeira e operacional conectada',
+  'Menos retrabalho e informação dispersa',
+  'Contratos e recebimentos no mesmo fluxo',
+  'Equipe mais produtiva e acompanhada',
+  'Diretoria em tempo real',
+  'Mais segurança para crescer e escalar',
 ];
 
 const megaMenu = {
   plataforma: {
     eyebrow: 'ecossistema santya',
-    title: 'Sistema comercial completo',
-    text: 'Uma plataforma para organizar CRM, agenda, tarefas, fechamentos, indicadores, notificações e acompanhamento executivo em uma estrutura elegante e confiável.',
+    title: 'Plataforma ERP Inteligente',
+    text: 'Uma operação completa para conectar gestão comercial, contratos, clientes, financeiro e diretoria em uma estrutura elegante, segura e pronta para escalar.',
     actionLabel: 'Conhecer plataforma',
     actionTarget: 'plataforma',
     cards: [
-      { label: 'Visão geral da plataforma', description: 'Entenda a jornada completa da operação comercial em um só lugar.', target: 'plataforma' },
-      { label: 'Fluxo do lead ao fechamento', description: 'Mostra como o sistema acompanha o processo comercial ponta a ponta.', target: 'recursos' },
-      { label: 'Painel da diretoria', description: 'Destaque a visão executiva e os indicadores consolidados da operação.', target: 'resource-3' },
-      { label: 'Acesso via PWA', description: 'Explique a mobilidade e a experiência em PC e celular.', target: 'beneficios' },
+      { label: 'Operação completa', description: 'Comercial, contratos, clientes e financeiro conectados em uma única plataforma.', target: 'erp-completo' },
+      { label: 'Gestão comercial', description: 'CRM, agenda, tarefas e fechamentos com contexto do início ao fim.', target: 'resource-0' },
+      { label: 'Diretoria em tempo real', description: 'Metas, ranking, BI e indicadores consolidados para decisões rápidas.', target: 'resource-8' },
+      { label: 'PWA para PC e celular', description: 'Mobilidade e experiência consistente no navegador ou como aplicativo.', target: 'beneficios' },
     ],
   },
   recursos: {
     eyebrow: 'recursos principais',
-    title: 'O que a Santya organiza no dia a dia',
-    text: 'A Santya centraliza a operação comercial com módulos que tornam o dia a dia mais claro, disciplinado e estratégico.',
+    title: 'Módulos para toda a operação',
+    text: 'A Santya centraliza a gestão comercial, financeira e operacional com módulos que compartilham dados e contexto.',
     actionLabel: 'Ver recursos',
     actionTarget: 'recursos',
     cards: [
-      { label: 'CRM e leads', description: 'Cadastro, histórico, pipeline e andamento da jornada comercial.', target: 'resource-0' },
-      { label: 'Agenda comercial', description: 'Plantões, visitas, compromissos e rotina organizada por equipe.', target: 'resource-1' },
-      { label: 'Tarefas e execução', description: 'Responsáveis, prazos e acompanhamento operacional com clareza.', target: 'resource-2' },
-      { label: 'Notificações e WhatsApp', description: 'Alertas internos e comunicação mais rápida para o time.', target: 'demonstracao' },
+      { label: 'CRM, agenda e tarefas', description: 'Leads, compromissos, responsáveis, prazos e rotina organizada por equipe.', target: 'resource-0' },
+      { label: 'Contratos e clientes', description: 'Assinaturas, documentos, compradores, unidades e histórico centralizados.', target: 'resource-3' },
+      { label: 'Financeiro e inadimplência', description: 'Boletos, contas a receber, baixas, vencimentos e pendências financeiras.', target: 'resource-5' },
+      { label: 'Automações e WhatsApp', description: 'Notificações e comunicações relevantes para cada etapa da operação.', target: 'resource-11' },
     ],
   },
   solucoes: {
     eyebrow: 'soluções por operação',
     title: 'Para operações que precisam de controle real',
-    text: 'Perfeito para construtoras, imobiliárias, equipes comerciais e operações consultivas que precisam organizar acompanhamento, rotina e fechamentos.',
+    text: 'Para construtoras, imobiliárias e empresas que precisam controlar o comercial, contratos, recebimentos e indicadores com profissionalismo.',
     actionLabel: 'Explorar soluções',
     actionTarget: 'solucoes',
     cards: [
-      { label: 'Construtoras', description: 'Apresentação premium da operação comercial com mais disciplina e visão gerencial.', target: 'solucoes' },
-      { label: 'Imobiliárias', description: 'Mais histórico, agenda e acompanhamento de negociações em um só fluxo.', target: 'solucoes' },
-      { label: 'Equipes comerciais', description: 'Rotina mais organizada, menos perda de prazo e acompanhamento do time.', target: 'solucoes' },
-      { label: 'Operações consultivas', description: 'Controle de etapas, compromissos e fechamento com leitura estratégica.', target: 'solucoes' },
+      { label: 'Construtoras', description: 'Empreendimentos, unidades, contratos, recebimentos e visão gerencial.', target: 'solucoes' },
+      { label: 'Imobiliárias', description: 'Corretores, oportunidades, clientes e processos em um fluxo integrado.', target: 'solucoes' },
+      { label: 'Equipes comerciais', description: 'Rotina organizada, metas, tarefas e acompanhamento da performance.', target: 'solucoes' },
+      { label: 'Operações em escala', description: 'Permissões, automações e indicadores para crescer com mais controle.', target: 'solucoes' },
     ],
   },
 } as const;
-
-const previewScreens = [
-  {
-    title: 'Dashboard comercial',
-    subtitle: 'Visão do sistema',
-    big: 'Ritmo e operação',
-    stats: [
-      ['Leads no mês', '15'],
-      ['Tarefas abertas', '17'],
-      ['Visitas agendadas', '4'],
-      ['Fechamentos', '2'],
-    ],
-    tags: ['CRM', 'Agenda', 'Fechamentos', 'Diretoria'],
-  },
-  {
-    title: 'Painel executivo',
-    subtitle: 'Leitura estratégica',
-    big: 'Diretoria e gestão',
-    stats: [
-      ['Meta do mês', '100%'],
-      ['Comercial ativo', '4,2 mi'],
-      ['Visitas do dia', '6'],
-      ['Alertas', '3'],
-    ],
-    tags: ['BI', 'Radar do dia', 'Equipe', 'Indicadores'],
-  },
-  {
-    title: 'Agenda e tarefas',
-    subtitle: 'Rotina organizada',
-    big: 'Execução comercial',
-    stats: [
-      ['Pendências', '12'],
-      ['Visitas', '4'],
-      ['Plantões', '2'],
-      ['Concluídas', '18'],
-    ],
-    tags: ['Agenda', 'Time', 'Prazos', 'Pendências'],
-  },
-];
 
 function scrollToId(id: string) {
   document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -275,49 +361,32 @@ function handleCta(type: 'scroll' | 'url', value: string) {
   goToTarget(value);
 }
 
-function SantyaBrand({ size = 'md', withWordmark = true }: { size?: 'sm' | 'md' | 'lg'; withWordmark?: boolean }) {
+function SantyaBrand({ size = 'md', withWordmark = true, tagline = false }: { size?: 'sm' | 'md' | 'lg'; withWordmark?: boolean; tagline?: boolean }) {
   const config = {
-    sm: { box: 'w-10 h-10 sm:w-11 sm:h-11', icon: 28, word: 'text-[24px] sm:text-[32px]', sub: 'text-[8px] sm:text-[10px]' },
-    md: { box: 'w-12 h-12', icon: 34, word: 'text-[38px]', sub: 'text-[10px]' },
-    lg: { box: 'w-16 h-16', icon: 44, word: 'text-[46px]', sub: 'text-[11px]' },
+    sm: 'h-[34px] sm:h-10',
+    md: 'h-[52px]',
+    lg: 'h-[60px]',
   }[size];
 
+  if (!withWordmark) {
+    return (
+      <img src="/brand/santya-symbol-transparent.png" alt="Santya" className={`${config} w-auto shrink-0 object-contain`} />
+    );
+  }
+
   return (
-    <div className="flex items-center gap-4 min-w-0">
-      <div
-        className={`${config.box} rounded-2xl border border-[rgba(184,116,42,0.18)] bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(244,237,226,0.72))] flex items-center justify-center shadow-[0_10px_28px_rgba(184,116,42,0.10)]`}
-      >
-        <svg viewBox="0 0 100 100" width={config.icon} height={config.icon} aria-hidden="true">
-          <defs>
-            <linearGradient id={`santyaGold-${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#F4D879" />
-              <stop offset="45%" stopColor="#D9A15B" />
-              <stop offset="100%" stopColor="#8F571C" />
-            </linearGradient>
-          </defs>
-          <rect x="20" y="20" width="60" height="60" rx="2" transform="rotate(45 50 50)" fill="none" stroke={`url(#santyaGold-${size})`} strokeWidth="4.2" />
-          <text x="50" y="60" textAnchor="middle" fontSize="54" fontFamily="Cormorant Garamond, Georgia, serif" fontStyle="italic" fill={`url(#santyaGold-${size})`}>
-            S
-          </text>
-        </svg>
-      </div>
-      {withWordmark && (
-        <div className="min-w-0">
-          <div className="flex items-end gap-2 sm:gap-3 min-w-0">
-            <div
-              className={`${config.word} leading-none font-semibold tracking-[0.12em] sm:tracking-[0.18em]`}
-              style={{ color: textDark, fontFamily: 'Cormorant Garamond, Georgia, Times New Roman, serif', textShadow: '0 1px 0 rgba(255,255,255,0.55)' }}
-            >
-              SANTYA
-            </div>
-            <div className="h-px w-6 sm:w-10 mb-1.5 shrink-0" style={{ background: `linear-gradient(90deg, ${goldSoft}, transparent)` }} />
-          </div>
-          <div className={`mt-1.5 ${config.sub} uppercase tracking-[0.24em] sm:tracking-[0.42em] whitespace-normal leading-[1.35] max-w-[180px] sm:max-w-none`} style={{ color: textLightMenu }}>
-            Soluções empresariais inteligentes
-          </div>
-        </div>
+    <span className="flex min-w-0 flex-col items-center justify-center">
+      <img
+        src="/brand/santya-logo-horizontal-transparent.png"
+        alt="Santya"
+        className={`${config} w-auto max-w-full shrink-0 object-contain`}
+      />
+      {tagline && (
+        <span className="mt-1 hidden whitespace-nowrap text-center text-[9px] font-medium uppercase tracking-[0.32em] text-slate-500/80 sm:block">
+          Soluções empresariais inteligentes
+        </span>
       )}
-    </div>
+    </span>
   );
 }
 
@@ -336,241 +405,287 @@ function GlowOrb({ className = '' }: { className?: string }) {
   return <div className={`absolute rounded-full blur-3xl opacity-40 ${className}`} style={{ background: `radial-gradient(circle, ${goldSoft} 0%, rgba(217,161,91,0.22) 36%, transparent 72%)` }} />;
 }
 
-function FloatingCore() {
-  const [activeStat, setActiveStat] = useState(0);
+function AnimatedCounter({ to, suffix = '', className = '' }: { to: number; suffix?: string; className?: string }) {
+  const value = useMotionValue(Math.max(0, Math.round(to * 0.72)));
+  const [display, setDisplay] = useState(Math.max(0, Math.round(to * 0.72)).toLocaleString('pt-BR'));
+
+  useMotionValueEvent(value, 'change', (latest) => {
+    setDisplay(Math.round(latest).toLocaleString('pt-BR'));
+  });
 
   useEffect(() => {
-    const id = window.setInterval(() => setActiveStat((prev) => (prev + 1) % 4), 2200);
-    return () => window.clearInterval(id);
-  }, []);
+    let controls = animate(value, to, { duration: 1.25, ease: 'easeOut' });
+    const interval = window.setInterval(() => {
+      controls.stop();
+      value.set(Math.max(0, Math.round(to * 0.9)));
+      controls = animate(value, to, { duration: 0.9, ease: 'easeOut' });
+    }, 8200);
 
-  const orbitCards = [
-    { title: 'CRM', text: 'Leads, histórico e acompanhamento' },
-    { title: 'Agenda', text: 'Compromissos, visitas e plantões' },
-    { title: 'Fechamentos', text: 'Pipeline, previsão e resultado' },
-    { title: 'Diretoria', text: 'Indicadores e visão executiva' },
+    return () => {
+      controls.stop();
+      window.clearInterval(interval);
+    };
+  }, [to, value]);
+
+  return <motion.span className={className}>{display}{suffix}</motion.span>;
+}
+
+function RealErpDashboardPreview() {
+  const [cycleStep, setCycleStep] = useState(0);
+  const cardClass = 'min-w-0 overflow-hidden rounded-[18px] border border-slate-200 bg-white shadow-[0_10px_28px_rgba(15,23,42,0.06)]';
+  const navigation = ['Início', 'CRM', 'Agenda', 'Fechamentos', 'Contratos', 'Clientes', 'Financeiro', 'Diretoria', 'Empreendimentos', 'Configurações'];
+  const activeNavigation = ['Início', 'CRM', 'Financeiro', 'Diretoria'][cycleStep % 4];
+  const activeRadar = cycleStep % 4;
+  const activeModule = (cycleStep + 1) % 4;
+  const radarItems = [
+    ['Tarefas atrasadas', '1', '#ef4444'],
+    ['Primeiro contato atrasado', '0', '#94a3b8'],
+    ['Visitas agendadas', '1', '#2563eb'],
+    ['Leads do mês', '11', '#B8742A'],
   ];
 
-  const trackScreens = [...previewScreens, ...previewScreens];
+  useEffect(() => {
+    const interval = window.setInterval(() => setCycleStep((step) => step + 1), 2100);
+    return () => window.clearInterval(interval);
+  }, []);
 
   return (
-    <div className="relative min-h-[860px] sm:min-h-[620px] md:min-h-[690px] flex items-center justify-center overflow-hidden rounded-[34px] border border-white/10 shadow-[0_25px_90px_rgba(28,45,73,0.18)]" style={{ background: 'linear-gradient(180deg,#2A4266 0%, #20324E 58%, #1A2B46 100%)' }}>
-      <GlowOrb className="w-80 h-80 top-10 right-6" />
-      <GlowOrb className="w-72 h-72 bottom-0 left-6" />
-      <div className="absolute inset-0 opacity-15" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.22) 1px, transparent 1.2px)', backgroundSize: '28px 28px' }} />
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.72, delay: 0.12 }}
+      className="relative min-h-[736px] md:min-h-[738px] overflow-hidden rounded-[36px] border border-slate-300/90 bg-[#dce3eb] p-1.5 shadow-[0_34px_110px_rgba(22,37,61,0.26)] xl:-ml-6 xl:w-[calc(100%+44px)]"
+    >
+      <div className="pointer-events-none absolute -right-24 -top-20 h-72 w-72 rounded-full bg-[#D9A15B]/20 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-24 -left-20 h-80 w-80 rounded-full bg-[#29466F]/30 blur-3xl" />
+      <div className="santya-erp-scroll absolute inset-1.5 z-10 overflow-x-auto overflow-y-hidden rounded-[30px] border border-white/80 bg-[#f1f5f9] text-slate-900 shadow-inner">
+        <div className="h-full min-h-0 min-w-[730px]">
+          <div className="sticky top-0 z-20 flex h-[60px] items-center gap-2.5 border-b border-slate-200 bg-white/95 px-3.5 shadow-[0_2px_12px_rgba(15,23,42,0.04)] backdrop-blur-xl">
+            <div className="flex shrink-0 items-center gap-2.5 pr-1">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[9px] shadow-sm ring-1 ring-slate-100">
+                <img src="/brand/santya-symbol-transparent.png" alt="" className="h-7 w-auto object-contain" />
+              </div>
+              <div>
+                <div className="text-[12px] font-bold leading-none text-slate-800">Santya ERP</div>
+                <div className="mt-1 text-[8px] uppercase tracking-[0.14em] text-slate-400">Gestão inteligente</div>
+              </div>
+            </div>
 
-      <div className="absolute inset-x-4 md:inset-x-6 top-4 md:top-6 z-20 rounded-[24px] border border-white/10 bg-[rgba(244,237,226,0.08)] p-3 md:p-4 backdrop-blur-md hidden sm:block">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {previewScreens[0].stats.map(([label, value], idx) => (
-            <motion.div key={label} animate={{ y: activeStat === idx ? -3 : 0, opacity: activeStat === idx ? 1 : 0.88 }} transition={{ duration: 0.35 }} className="rounded-[18px] border border-white/10 bg-[rgba(255,255,255,0.07)] px-3 py-3">
-              <div className="text-[11px] text-white/62">{label}</div>
-              <div className="mt-1 text-xl md:text-2xl font-semibold text-white">{value}</div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+            <nav className="flex min-w-0 flex-1 items-center gap-0.5 overflow-hidden" aria-label="Navegação ilustrativa do ERP">
+              {navigation.map((item) => (
+                <motion.div
+                  key={item}
+                  animate={activeNavigation === item ? { opacity: 1, boxShadow: '0 5px 14px rgba(32,50,78,0.18)' } : { opacity: 0.72, boxShadow: '0 0 0 rgba(0,0,0,0)' }}
+                  transition={{ duration: 0.45 }}
+                  className={`shrink-0 rounded-full px-2 py-1.5 text-[8px] font-semibold ${activeNavigation === item ? (item === 'Início' ? 'bg-[#ea580c] text-white' : 'bg-[#20324E] text-white') : 'text-slate-500'}`}
+                >
+                  {item}
+                </motion.div>
+              ))}
+            </nav>
 
-      <div className="absolute left-3 right-3 md:left-4 md:right-4 top-[104px] sm:top-[132px] md:top-[150px] z-10 rounded-[28px] border border-white/10 bg-[rgba(245,239,232,0.94)] p-3 shadow-[0_18px_60px_rgba(15,23,42,0.18)] overflow-hidden" style={{ maxHeight: 'calc(100% - 124px)' }}>
-        <div className="absolute top-3 right-3 flex items-center gap-2 rounded-full border border-slate-200 bg-white/88 px-3 py-1.5 shadow-sm z-20">
-          <div className="h-2.5 w-2.5 rounded-full bg-slate-300" />
-          <div className="h-2.5 w-10 rounded-full" style={{ background: `linear-gradient(90deg, ${goldSoft}, ${gold})` }} />
-          <div className="text-[10px] uppercase tracking-[0.18em]" style={{ color: textMuted }}>prévia em movimento</div>
-        </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <div className="relative flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-slate-50 text-slate-500">
+                <Bell size={13} />
+                <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#B8742A]" />
+              </div>
+              <span className="text-[10px] font-semibold text-slate-600">Admin</span>
+              <div className="flex items-center gap-1.5 rounded-[9px] bg-[#ea580c] px-2.5 py-2 text-[9px] font-semibold text-white shadow-sm">
+                <LogOut size={11} /> Sair
+              </div>
+            </div>
+          </div>
 
-        <div className="overflow-hidden rounded-[22px] hidden md:block">
-          <div className="santya-marquee-track">
-            {trackScreens.map((screen, index) => (
-              <div key={`${screen.title}-${index}`} className="santya-preview-screen rounded-[22px] overflow-hidden border border-slate-200 bg-[#f8f7f4]">
-                <div className="flex items-center justify-between gap-4 px-4 py-3 bg-white border-b border-slate-200">
-                  <div>
-                    <div className="text-[11px] uppercase tracking-[0.22em]" style={{ color: gold }}>
-                      SANTYA • {screen.subtitle}
-                    </div>
-                    <div className="mt-1 text-base md:text-lg font-semibold" style={{ color: textDark }}>
-                      {screen.title}
-                    </div>
+          <div className="grid h-[calc(100%_-_60px)] min-h-0 grid-rows-[112px_minmax(190px,1.05fr)_minmax(180px,0.95fr)] gap-2 p-2.5">
+            <div className="relative h-full min-h-0 overflow-hidden rounded-[18px] bg-[linear-gradient(120deg,#182A46_0%,#203A60_58%,#31557F_100%)] px-4 py-3 text-white shadow-[0_16px_42px_rgba(32,50,78,0.26)]">
+              <div className="absolute -right-12 -top-16 h-40 w-40 rounded-full border border-white/10" />
+              <div className="absolute -right-4 -top-8 h-28 w-28 rounded-full border border-[#D9A15B]/20" />
+              <div className="relative flex items-center justify-between gap-5">
+                <div>
+                  <div className="text-[9px] font-semibold uppercase tracking-[0.22em] text-[#D9A15B]">Equipe comercial</div>
+                  <h2 className="mt-1.5 text-[22px] font-semibold leading-none">Bem-vindo, Jessica</h2>
+                  <p className="mt-1.5 text-[9px] text-white/65">Dashboard ERP • Perfil: admin</p>
+                  <div className="mt-2 flex gap-2">
+                    <div className="rounded-[8px] bg-[#D9A15B] px-3 py-1.5 text-[8px] font-semibold text-[#172236] shadow-sm">Abrir tarefas</div>
+                    <div className="rounded-[8px] border border-white/20 bg-white/[0.06] px-3 py-1.5 text-[8px] font-semibold text-white">Ver todos os leads</div>
                   </div>
-                  <div className="hidden md:flex items-center gap-2">
-                    {screen.tags.map((item) => (
-                      <div key={item} className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px]" style={{ color: textMuted }}>
-                        {item}
+                </div>
+                <div className="hidden w-[202px] grid-cols-2 gap-2 min-[720px]:grid">
+                  {[
+                    ['Leads do mês', '11'],
+                    ['Visitas', '1'],
+                    ['Fechamentos', '12'],
+                    ['Pendências', '8'],
+                  ].map(([label, value], index) => (
+                    <motion.div key={label} animate={{ y: cycleStep % 4 === index ? -2 : 0, backgroundColor: cycleStep % 4 === index ? 'rgba(255,255,255,0.13)' : 'rgba(255,255,255,0.07)' }} transition={{ duration: 0.4 }} className="rounded-[10px] border border-white/10 px-2.5 py-2">
+                      <div className="text-[8px] text-white/55">{label}</div>
+                      <AnimatedCounter to={Number(value)} className="mt-1 block text-[16px] font-semibold text-white" />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid h-full min-h-0 grid-cols-3 gap-2.5">
+              <div className={`${cardClass} h-full min-h-0 p-3`}>
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-[12px] font-semibold text-slate-800">Performance do trimestre</h3>
+                    <p className="mt-1 text-[8px] text-slate-400">Resultado acumulado</p>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 px-2 py-1 text-[8px] font-semibold text-emerald-700">Acima da meta</span>
+                </div>
+                <div className="mt-2.5 flex items-center gap-3">
+                  <motion.div initial={{ rotate: -120, scale: 0.88, opacity: 0 }} animate={{ rotate: 0, scale: 1, opacity: 1 }} transition={{ duration: 1.3, ease: 'easeOut' }} className="relative h-[72px] w-[72px] shrink-0 rounded-full" style={{ background: 'conic-gradient(#16a34a 0deg 286deg, #D9A15B 286deg 330deg, #e2e8f0 330deg 360deg)' }}>
+                    <div className="absolute inset-[7px] flex flex-col items-center justify-center rounded-full bg-white">
+                      <AnimatedCounter to={199} suffix="%" className="text-[19px] font-bold text-slate-800" />
+                      <span className="text-[7px] text-slate-400">meta atingida</span>
+                    </div>
+                  </motion.div>
+                  <div className="grid flex-1 gap-1.5">
+                    {[
+                      ['Meta', 'R$ 1,0 mi'],
+                      ['Atual', 'R$ 2,0 mi'],
+                      ['Gap', 'R$ 0'],
+                    ].map(([label, value], index) => (
+                      <div key={label} className="flex items-center justify-between rounded-[9px] bg-slate-50 px-2.5 py-2">
+                        <span className="text-[8px] text-slate-400">{label}</span>
+                        <span className={`text-[9px] font-semibold ${index === 1 ? 'text-emerald-700' : 'text-slate-700'}`}>{value}</span>
                       </div>
                     ))}
                   </div>
                 </div>
+              </div>
 
-                <div className="p-4" style={{ background: 'linear-gradient(180deg, #f8f7f4 0%, #f3f0ea 100%)' }}>
-                  <div className="rounded-[22px] p-4 md:p-5" style={{ background: 'linear-gradient(180deg,#1f3d74 0%, #1b3564 100%)' }}>
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <div className="text-[11px] uppercase tracking-[0.24em] text-[#d9a15b]">Ritmo comercial</div>
-                        <div className="mt-2 text-xl md:text-2xl font-semibold text-white">{screen.big}</div>
-                        <div className="mt-1 text-sm text-white/72">Leitura diária da operação</div>
-                      </div>
-                      <div className="hidden md:flex rounded-full px-4 py-2 text-sm font-medium text-[#1b1205]" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }}>Abrir módulo</div>
+              <div className={`${cardClass} h-full min-h-0 p-3`}>
+                <h3 className="text-[12px] font-semibold text-slate-800">Radar do mês</h3>
+                <p className="mt-1 text-[8px] text-slate-400">Pontos de atenção da operação</p>
+                <div className="mt-2.5 flex items-center gap-3">
+                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 22, repeat: Infinity, ease: 'linear' }} className="relative h-[74px] w-[74px] shrink-0 rounded-full" style={{ background: 'conic-gradient(#B8742A 0deg 305deg, #2563eb 305deg 333deg, #ef4444 333deg 360deg)' }}>
+                    <div className="absolute inset-[9px] flex flex-col items-center justify-center rounded-full bg-white">
+                      <motion.div animate={{ rotate: -360 }} transition={{ duration: 22, repeat: Infinity, ease: 'linear' }} className="flex flex-col items-center">
+                        <AnimatedCounter to={13} className="text-[19px] font-bold text-slate-800" />
+                        <span className="text-[7px] text-slate-400">total</span>
+                      </motion.div>
                     </div>
-                    <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {screen.stats.map(([label, value]) => (
-                        <div key={label} className="rounded-[16px] border border-white/10 bg-white/10 px-3 py-3">
-                          <div className="text-[11px] text-white/62">{label}</div>
-                          <div className="mt-1 text-lg md:text-xl font-semibold text-white">{value}</div>
+                  </motion.div>
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    {radarItems.map(([label, value, color], index) => (
+                      <motion.div key={label} animate={{ x: activeRadar === index ? 3 : 0, backgroundColor: activeRadar === index ? `${color}12` : 'rgba(255,255,255,0)' }} transition={{ duration: 0.35 }} className="flex items-center justify-between gap-2 rounded-[7px] px-1.5 py-1 text-[8px]">
+                        <div className="flex min-w-0 items-center gap-1.5 text-slate-500">
+                          <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: color }} />
+                          <span className="truncate">{label}</span>
                         </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-4 grid md:grid-cols-[1.15fr_0.85fr] gap-4">
-                    <div className="rounded-[20px] border border-slate-200 bg-white p-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <div className="text-sm font-semibold" style={{ color: textDark }}>Movimento do mês</div>
-                          <div className="text-xs mt-1" style={{ color: textMuted }}>Referência comercial</div>
-                        </div>
-                        <div className="rounded-full px-3 py-1 text-[11px] bg-slate-100" style={{ color: textMuted }}>Equipe comercial</div>
-                      </div>
-                      <div className="mt-5 flex items-end gap-2 h-[150px]">
-                        {[34, 48, 42, 56, 78, 118].map((height, idx) => (
-                          <div key={height} className="flex-1 flex flex-col items-center justify-end gap-3">
-                            <div className="w-full rounded-t-[14px]" style={{ height, background: idx === 5 ? 'linear-gradient(180deg,#8EC2FF,#2563EB)' : 'linear-gradient(180deg,#7BB3FF,#4E8DFF)' }} />
-                            <div className="text-[10px]" style={{ color: textMuted }}>{['OUT', 'NOV', 'DEZ', 'JAN', 'FEV', 'MAR'][idx]}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="grid gap-4">
-                      <div className="rounded-[20px] border border-slate-200 bg-white p-4">
-                        <div className="text-sm font-semibold" style={{ color: textDark }}>Resumo do dia</div>
-                        <div className="mt-3 grid gap-3">
-                          {[
-                            ['Meta do mês', '100%', '🤩'],
-                            ['Leads no mês', '15', '•'],
-                            ['Visitas agendadas', '4', '•'],
-                          ].map(([k, v, e], i) => (
-                            <div key={k} className="rounded-[14px] border border-slate-100 bg-slate-50 px-3 py-3 flex items-center justify-between gap-3">
-                              <div className="flex items-center gap-3">
-                                <span className="text-lg">{e}</span>
-                                <div className="text-sm" style={{ color: textDark }}>{k}</div>
-                              </div>
-                              <div className="text-lg font-semibold" style={{ color: i === 0 ? '#16a34a' : textDark }}>{v}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="rounded-[20px] border border-slate-200 bg-white p-4">
-                        <div className="text-sm font-semibold" style={{ color: textDark }}>Acesso rápido</div>
-                        <div className="mt-3 grid gap-3">
-                          {['CRM', 'Agenda', 'Tarefas', 'Diretoria'].map((module) => (
-                            <div key={module} className="rounded-[14px] border border-slate-100 bg-slate-50 px-3 py-3 text-sm font-medium" style={{ color: textDark }}>
-                              {module}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                        <motion.span animate={{ scale: activeRadar === index ? 1.16 : 1 }} className="font-semibold text-slate-700">{value}</motion.span>
+                      </motion.div>
+                    ))}
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        <div className="md:hidden rounded-[22px] overflow-hidden border border-slate-200 bg-[#f8f7f4]">
-          <div className="flex items-center justify-between gap-3 px-4 py-3 bg-white border-b border-slate-200">
-            <div>
-              <div className="text-[10px] uppercase tracking-[0.18em]" style={{ color: gold }}>
-                SANTYA • prévia em movimento
-              </div>
-              <div className="mt-1 text-base font-semibold" style={{ color: textDark }}>
-                Leitura leve do sistema no celular
-              </div>
-            </div>
-            <div className="rounded-full px-3 py-1 text-[10px] font-medium text-[#1b1205]" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }}>
-              Ao vivo
-            </div>
-          </div>
-          <div className="p-3 sm:p-4" style={{ background: 'linear-gradient(180deg, #f8f7f4 0%, #f3f0ea 100%)' }}>
-            <div className="overflow-hidden rounded-[18px]">
-              <div className="santya-mobile-marquee-track">
-                {[...previewScreens, ...previewScreens].map((screen, index) => (
-                  <div key={`${screen.title}-mobile-${index}`} className="santya-mobile-preview rounded-[18px] overflow-hidden border border-slate-200 bg-white shadow-sm">
-                    <div className="px-3 py-3 border-b border-slate-200 bg-white">
-                      <div className="text-[10px] uppercase tracking-[0.18em]" style={{ color: gold }}>{screen.subtitle}</div>
-                      <div className="mt-1 text-sm font-semibold leading-snug" style={{ color: textDark }}>{screen.title}</div>
-                    </div>
-                    <div className="p-3" style={{ background: 'linear-gradient(180deg,#1f3d74 0%, #1b3564 100%)' }}>
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <div className="text-[10px] uppercase tracking-[0.18em] text-[#d9a15b]">Ritmo comercial</div>
-                          <div className="mt-1 text-lg font-semibold text-white leading-tight">{screen.big}</div>
-                          <div className="mt-1 text-[11px] text-white/70">Leitura da operação</div>
-                        </div>
-                        <div className="rounded-full px-3 py-1 text-[10px] font-medium text-[#1b1205]" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }}>
-                          Ao vivo
-                        </div>
-                      </div>
-                      <div className="mt-3 grid grid-cols-2 gap-2">
-                        {screen.stats.slice(0, 4).map(([label, value]) => (
-                          <div key={label} className="rounded-[14px] border border-white/10 bg-white/10 px-3 py-2.5 min-h-[74px] flex flex-col justify-between">
-                            <div className="text-[10px] leading-tight text-white/65">{label}</div>
-                            <div className="mt-1 text-base font-semibold text-white">{value}</div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="p-3 bg-[#f8f7f4] border-t border-slate-200">
-                      <div className="rounded-[16px] border border-slate-200 bg-white p-3">
-                        <div className="flex items-center justify-between gap-2">
-                          <div>
-                            <div className="text-[10px] uppercase tracking-[0.14em]" style={{ color: textMuted }}>Movimento do mês</div>
-                            <div className="mt-1 text-xs" style={{ color: textMuted }}>Referência comercial</div>
-                          </div>
-                          <div className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px]" style={{ color: textMuted }}>Equipe</div>
-                        </div>
-                        <div className="mt-3 flex items-end gap-1.5 h-[92px]">
-                          {[26, 38, 34, 44, 58, 74].map((height, barIndex) => (
-                            <div key={`${screen.title}-${barIndex}`} className="flex-1 flex flex-col items-center justify-end gap-2">
-                              <div className="w-full rounded-t-[10px]" style={{ height, background: barIndex === 5 ? 'linear-gradient(180deg,#8EC2FF,#2563EB)' : 'linear-gradient(180deg,#A9CCFF,#5B8EF7)' }} />
-                              <div className="text-[9px]" style={{ color: textMuted }}>{['OUT', 'NOV', 'DEZ', 'JAN', 'FEV', 'MAR'][barIndex]}</div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 mt-2">
-                        <div className="rounded-[14px] border border-slate-200 bg-white px-3 py-3 min-h-[74px]">
-                          <div className="text-[10px] uppercase tracking-[0.14em]" style={{ color: textMuted }}>Resumo do dia</div>
-                          <div className="mt-2 text-sm font-semibold" style={{ color: textDark }}>Meta 100%</div>
-                        </div>
-                        <div className="rounded-[14px] border border-slate-200 bg-white px-3 py-3 min-h-[74px]">
-                          <div className="text-[10px] uppercase tracking-[0.14em]" style={{ color: textMuted }}>Acesso rápido</div>
-                          <div className="mt-2 text-sm font-semibold" style={{ color: textDark }}>CRM + Agenda</div>
-                        </div>
-                      </div>
-                    </div>
+              <div className={`${cardClass} h-full min-h-0 p-3`}>
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <h3 className="text-[12px] font-semibold text-slate-800">Ritmo comercial</h3>
+                    <p className="mt-1 text-[8px] text-slate-400">Evolução dos últimos 6 meses</p>
                   </div>
-                ))}
+                  <span className="text-[9px] font-semibold text-emerald-700">+18,4%</span>
+                </div>
+                <div className="mt-2.5 rounded-[11px] bg-slate-50 px-2 pt-1">
+                  <svg viewBox="0 0 220 82" className="h-[68px] w-full" role="img" aria-label="Gráfico de linha do ritmo comercial">
+                    {[14, 36, 58].map((y) => <line key={y} x1="8" y1={y} x2="212" y2={y} stroke="#e2e8f0" strokeWidth="1" />)}
+                    <motion.path d="M10 62 C35 58, 41 48, 54 52 S83 61, 94 42 S120 25, 136 34 S166 45, 178 21 S199 18, 211 10" fill="none" stroke="#B8742A" strokeWidth="3" strokeLinecap="round" initial={{ pathLength: 0, opacity: 0.35 }} animate={{ pathLength: [0, 1, 1], opacity: [0.35, 1, 1] }} transition={{ duration: 5.6, times: [0, 0.58, 1], repeat: Infinity, repeatDelay: 1.4, ease: 'easeInOut' }} />
+                    <motion.path d="M10 62 C35 58, 41 48, 54 52 S83 61, 94 42 S120 25, 136 34 S166 45, 178 21 S199 18, 211 10 L211 72 L10 72 Z" fill="url(#lineArea)" animate={{ opacity: [0, 0.3, 0.3] }} transition={{ duration: 5.6, times: [0, 0.58, 1], repeat: Infinity, repeatDelay: 1.4 }} />
+                    <defs><linearGradient id="lineArea" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#D9A15B" stopOpacity="0.22" /><stop offset="1" stopColor="#D9A15B" stopOpacity="0" /></linearGradient></defs>
+                  </svg>
+                  <div className="flex justify-between px-1 pb-2 text-[7px] text-slate-400">
+                    {['Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul'].map((month) => <span key={month}>{month}</span>)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid h-full min-h-0 grid-cols-2 gap-2.5">
+              <div className={`${cardClass} h-full min-h-0 p-3`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-[12px] font-semibold text-slate-800">Comparativo</h3>
+                    <p className="mt-1 text-[8px] text-slate-400">Venda total do mês</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-[15px] font-bold text-slate-800">R$ 0</div>
+                    <div className="mt-0.5 text-[8px] text-slate-400">vs R$ 524 mil mês anterior</div>
+                  </div>
+                </div>
+                <div className="mt-3 flex h-[74px] items-end gap-2.5 border-b border-slate-100 px-3">
+                  {[
+                    ['Fev', 24, '#cbd5e1'],
+                    ['Mar', 34, '#cbd5e1'],
+                    ['Abr', 42, '#94a3b8'],
+                    ['Mai', 53, '#64748b'],
+                    ['Jun', 64, '#20324E'],
+                    ['Jul', 6, '#D9A15B'],
+                  ].map(([month, height, color], index) => (
+                    <div key={month} className="flex flex-1 flex-col items-center justify-end gap-1">
+                      <motion.div
+                        className="w-full max-w-[30px] rounded-t-[6px]"
+                        style={{ background: String(color) }}
+                        initial={{ height: 4 }}
+                        animate={{ height: [4, Number(height), Number(height)] }}
+                        transition={{ duration: 5.8, times: [0, 0.26, 1], delay: index * 0.12, repeat: Infinity, repeatDelay: 1.2, ease: 'easeOut' }}
+                      />
+                      <span className="text-[7px] text-slate-400">{month}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className={`${cardClass} h-full min-h-0 p-3`}>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-[12px] font-semibold text-slate-800">Módulos</h3>
+                    <p className="mt-1 text-[8px] text-slate-400">Acesso rápido</p>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-2 py-1 text-[8px] text-slate-500">Operação</span>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
+                  {[
+                    { label: 'CRM', icon: Users2 },
+                    { label: 'Todos os Leads', icon: LayoutDashboard },
+                    { label: 'Fechamentos', icon: Target },
+                    { label: 'Diretoria', icon: Crown },
+                  ].map((item, index) => {
+                    const Icon = item.icon;
+                    const isActive = activeModule === index;
+                    return (
+                      <motion.div
+                        key={item.label}
+                        animate={{ y: isActive ? -2 : 0, borderColor: isActive ? 'rgba(184,116,42,0.38)' : 'rgba(241,245,249,1)', backgroundColor: isActive ? 'rgba(255,247,237,0.92)' : 'rgba(248,250,252,1)' }}
+                        transition={{ duration: 0.38 }}
+                        className="flex min-w-0 items-center gap-2 rounded-[10px] border px-2.5 py-1.5"
+                      >
+                        <motion.span animate={{ backgroundColor: isActive ? '#20324E' : '#ffffff', color: isActive ? '#D9A15B' : '#B8742A' }} className="flex h-8 w-8 items-center justify-center rounded-[9px] shadow-sm"><Icon size={14} /></motion.span>
+                        <span className={`text-[9px] font-semibold ${isActive ? 'text-slate-800' : 'text-slate-600'}`}>{item.label}</span>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-1.5">
+                  <div className="flex min-w-0 items-center justify-between rounded-[9px] border border-slate-100 bg-slate-50 px-2.5 py-2">
+                    <span className="text-[8px] font-semibold text-slate-500">Financeiro</span>
+                    <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[7px] font-bold text-amber-700">84 boletos</span>
+                  </div>
+                  <div className="flex min-w-0 items-center justify-between rounded-[9px] border border-slate-100 bg-slate-50 px-2.5 py-2">
+                    <span className="text-[8px] font-semibold text-slate-500">Contratos</span>
+                    <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[7px] font-bold text-blue-700">18 assinando</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-
-      <div className="absolute inset-0 p-6 md:p-8 pointer-events-none hidden md:block">
-        <div className="grid grid-cols-2 gap-4 h-full">
-          {orbitCards.map((item, index) => {
-            const positions = ['self-start justify-self-start mt-24', 'self-start justify-self-end mt-16', 'self-end justify-self-start mb-28', 'self-end justify-self-end mb-20'];
-            return (
-              <motion.div key={item.title} animate={{ y: [0, index % 2 === 0 ? -8 : 8, 0], opacity: [0.85, 1, 0.85] }} transition={{ duration: 5 + index, repeat: Infinity, ease: 'easeInOut' }} className={`${positions[index]} max-w-[220px] rounded-[24px] border p-4 md:p-5 backdrop-blur-md border-white/10 bg-[rgba(255,248,240,0.10)]`}>
-                <div className="text-sm font-semibold" style={{ color: goldSoft }}>{item.title}</div>
-                <div className="text-sm text-white/86 leading-6 mt-2">{item.text}</div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -581,7 +696,7 @@ function MegaMenuPanel({ activeKey, onClose, onPanelEnter, onPanelLeave }: { act
   return (
     <AnimatePresence>
       <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.2 }} onMouseEnter={onPanelEnter} onMouseLeave={onPanelLeave} className="fixed inset-x-0 top-[78px] z-[70] px-3 sm:px-4 pointer-events-auto">
-        <div className="mx-auto w-[860px] max-w-full rounded-[24px] border border-white/10 overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.22)]" style={{ background: 'rgba(245,237,226,0.97)', backdropFilter: 'blur(18px)' }}>
+        <div className="mx-auto w-[900px] max-w-full rounded-[24px] border border-slate-200 overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.24)]" style={{ background: '#F4EDE2' }}>
           <div className="grid md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] text-slate-900">
             <div className="p-5 md:p-7 lg:p-8 border-b md:border-b-0 md:border-r border-slate-200/70 min-w-0">
               <div className="text-xs uppercase tracking-[0.28em]" style={{ color: gold }}>{data.eyebrow}</div>
@@ -619,7 +734,9 @@ export default function App() {
   const hero = useMemo(() => heroSlides[active], [active]);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState<keyof typeof megaMenu | null>(null);
+  const [megaMode, setMegaMode] = useState<'hover' | 'click' | null>(null);
   const megaCloseTimeout = useRef<number | null>(null);
+  const megaDesktopRef = useRef<HTMLDivElement | null>(null);
   const [mobileMegaOpen, setMobileMegaOpen] = useState<keyof typeof megaMenu | null>(null);
   const [resourceActive, setResourceActive] = useState(0);
 
@@ -630,20 +747,78 @@ export default function App() {
     }
   };
 
-  const scheduleMegaClose = () => {
+  const closeMega = () => {
     clearMegaClose();
-    megaCloseTimeout.current = window.setTimeout(() => setMegaOpen(null), 680);
+    setMegaOpen(null);
+    setMegaMode(null);
+  };
+
+  const scheduleMegaClose = () => {
+    if (megaMode !== 'hover') return;
+    clearMegaClose();
+    megaCloseTimeout.current = window.setTimeout(closeMega, 120);
   };
 
   useEffect(() => () => clearMegaClose(), []);
 
+  useEffect(() => {
+    const handlePointerDown = (event: MouseEvent) => {
+      if (megaDesktopRef.current && !megaDesktopRef.current.contains(event.target as Node)) {
+        clearMegaClose();
+        setMegaOpen(null);
+        setMegaMode(null);
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        clearMegaClose();
+        setMegaOpen(null);
+        setMegaMode(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handlePointerDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handlePointerDown);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   const [resourceLocked, setResourceLocked] = useState(false);
+  const [resourceHoverPaused, setResourceHoverPaused] = useState(false);
+  const moduleListRef = useRef<HTMLDivElement | null>(null);
+  const moduleItemRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(() => {
-    if (resourceLocked) return;
-    const id = window.setInterval(() => setResourceActive((prev) => (prev + 1) % featureDetails.length), 3200);
+    if (resourceLocked || resourceHoverPaused) return;
+    const id = window.setInterval(() => setResourceActive((prev) => (prev + 1) % featureDetails.length), 3000);
     return () => window.clearInterval(id);
-  }, [resourceLocked]);
+  }, [resourceLocked, resourceHoverPaused]);
+
+  useEffect(() => {
+    if (!resourceLocked) return;
+    const id = window.setTimeout(() => setResourceLocked(false), 9000);
+    return () => window.clearTimeout(id);
+  }, [resourceLocked, resourceActive]);
+
+  useEffect(() => {
+    const container = moduleListRef.current;
+    const item = moduleItemRefs.current[resourceActive];
+    if (!container || !item) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const itemRect = item.getBoundingClientRect();
+    const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
+    if (isDesktop) {
+      const top = container.scrollTop + itemRect.top - containerRect.top - (container.clientHeight - itemRect.height) / 2;
+      container.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+    } else {
+      const left = container.scrollLeft + itemRect.left - containerRect.left - (container.clientWidth - itemRect.width) / 2;
+      container.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    }
+  }, [resourceActive]);
 
   const activeFeature = featureDetails[resourceActive];
   const ActiveFeatureIcon = activeFeature.icon;
@@ -655,20 +830,31 @@ export default function App() {
       <header className="sticky top-0 z-50 border-b border-white/20 backdrop-blur-xl bg-[rgba(244,237,226,0.42)]">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-20 flex items-center justify-between gap-6 relative">
           <button className="text-left max-w-[calc(100vw-84px)] md:max-w-none shrink min-w-0" onClick={() => scrollToId('topo')}>
-            <SantyaBrand size="sm" />
+            <SantyaBrand size="sm" tagline />
           </button>
 
-          <div className="hidden xl:flex items-center gap-7 text-sm relative" onMouseEnter={clearMegaClose} onMouseLeave={scheduleMegaClose}>
+          <div ref={megaDesktopRef} className="hidden xl:flex items-center gap-7 text-sm relative" onMouseEnter={clearMegaClose} onMouseLeave={scheduleMegaClose}>
             {menuItems.map((item) => (
               <div key={item.key} className="relative">
                 <button
-                  onMouseEnter={() => { clearMegaClose(); item.hasMega && setMegaOpen(item.key as keyof typeof megaMenu); }}
+                  onMouseEnter={() => {
+                    if (!item.hasMega || megaMode === 'click') return;
+                    clearMegaClose();
+                    setMegaOpen(item.key as keyof typeof megaMenu);
+                    setMegaMode('hover');
+                  }}
                   onClick={() => {
                     if (item.hasMega) {
-                      setMegaOpen((prev) => (prev === item.key ? null : (item.key as keyof typeof megaMenu)));
+                      if (megaMode === 'click' && megaOpen === item.key) {
+                        closeMega();
+                      } else {
+                        clearMegaClose();
+                        setMegaOpen(item.key as keyof typeof megaMenu);
+                        setMegaMode('click');
+                      }
                     } else {
                       scrollToId(sectionMap[item.key]);
-                      setMegaOpen(null);
+                      closeMega();
                     }
                   }}
                   className="flex items-center gap-1 transition hover:opacity-80"
@@ -678,19 +864,19 @@ export default function App() {
                 </button>
               </div>
             ))}
-            <MegaMenuPanel activeKey={megaOpen} onClose={() => setMegaOpen(null)} onPanelEnter={clearMegaClose} onPanelLeave={scheduleMegaClose} />
+            <MegaMenuPanel activeKey={megaOpen} onClose={closeMega} onPanelEnter={clearMegaClose} onPanelLeave={scheduleMegaClose} />
           </div>
 
           <div className="hidden md:flex items-center gap-3">
             <Button variant="outline" className="rounded-2xl border-slate-300 bg-white/55 hover:bg-white/80" style={{ color: textDark }} onClick={() => handleCta('url', loginUrl)}>
               Entrar
             </Button>
-            <Button className="rounded-2xl px-5 text-[#1b1205] font-semibold shadow-[0_0_30px_rgba(217,161,91,0.22)]" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('demonstracao')}>
+            <Button className="h-11 min-w-[178px] px-6 whitespace-nowrap rounded-2xl text-sm font-semibold text-[#1b1205] shadow-[0_0_30px_rgba(217,161,91,0.22)]" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('demonstracao')}>
               Solicitar demonstração
             </Button>
           </div>
 
-          <button onClick={() => setMobileOpen((v) => !v)} className="xl:hidden w-11 h-11 rounded-2xl border border-white/20 bg-white/10 flex items-center justify-center">
+          <button onClick={() => { closeMega(); setMobileOpen((v) => !v); }} className="xl:hidden w-11 h-11 rounded-2xl border border-white/20 bg-white/10 flex items-center justify-center">
             {mobileOpen ? <X size={20} color={textDark} /> : <Menu size={20} color={textDark} />}
           </button>
         </div>
@@ -745,8 +931,8 @@ export default function App() {
 
       <main id="topo" className="relative z-10">
         <section className="max-w-7xl mx-auto px-4 md:px-6 pt-10 md:pt-16 pb-12 md:pb-20">
-          <div className="grid xl:grid-cols-[1.08fr_0.92fr] gap-7 items-stretch">
-            <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75 }} className="relative overflow-hidden rounded-[34px] border border-white/10 min-h-[590px] md:min-h-[690px] p-8 md:p-12 flex flex-col justify-between shadow-[0_30px_100px_rgba(22,37,61,0.18)]" style={{ background: `linear-gradient(135deg, ${slateSoft} 0%, ${slate} 52%, #314C74 100%)` }}>
+          <div className="grid xl:grid-cols-[0.84fr_1.16fr] gap-7 items-stretch">
+            <motion.div initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.75 }} className="relative overflow-hidden rounded-[34px] border border-white/10 min-h-[590px] md:min-h-[690px] p-8 md:p-12 xl:p-10 flex flex-col justify-between shadow-[0_30px_100px_rgba(22,37,61,0.18)]" style={{ background: `linear-gradient(135deg, ${slateSoft} 0%, ${slate} 52%, #314C74 100%)` }}>
               <GlowOrb className="w-72 h-72 top-8 right-0" />
               <GlowOrb className="w-96 h-96 -bottom-10 left-12" />
               <div className="absolute inset-0 opacity-[0.08]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px)', backgroundSize: '34px 34px' }} />
@@ -757,7 +943,7 @@ export default function App() {
                 </span>
                 <AnimatePresence mode="wait">
                   <motion.div key={hero.title} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.45 }}>
-                    <h1 className="mt-7 text-4xl md:text-6xl font-semibold leading-[1.02] max-w-5xl text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.18)]">{hero.title}</h1>
+                    <h1 className="mt-7 text-4xl md:text-6xl xl:text-[52px] font-semibold leading-[1.02] max-w-5xl text-white drop-shadow-[0_2px_18px_rgba(0,0,0,0.18)]">{hero.title}</h1>
                     <p className="mt-6 text-white/80 text-base md:text-xl leading-8 max-w-3xl">{hero.text}</p>
                   </motion.div>
                 </AnimatePresence>
@@ -772,7 +958,7 @@ export default function App() {
                 </div>
 
                 <div className="mt-7 flex flex-wrap gap-3 text-sm text-white/82">
-                  {['Gestão comercial completa', 'Notificações inteligentes', 'Acesso via PWA', 'Suporte humanizado'].map((tag) => (
+                  {['ERP empresarial', 'Operação completa', 'Diretoria em tempo real', 'PWA no PC e celular'].map((tag) => (
                     <div key={tag} className="rounded-full border border-white/10 bg-white/[0.06] px-4 py-2">{tag}</div>
                   ))}
                 </div>
@@ -786,9 +972,9 @@ export default function App() {
                 </div>
                 <div className="grid grid-cols-3 gap-3 w-full md:w-auto">
                   {[
-                    { label: 'CRM + rotina', value: '360°' },
-                    { label: 'Diretoria', value: 'BI' },
-                    { label: 'WhatsApp + PWA', value: 'ON' },
+                    { label: 'Operação integrada', value: '360°' },
+                    { label: 'Diretoria em tempo real', value: 'BI' },
+                    { label: 'Automações + PWA', value: 'ON' },
                   ].map((item) => (
                     <div key={item.label} className="rounded-2xl border border-white/10 bg-white/8 px-4 py-4 min-w-[126px]">
                       <div className="text-2xl font-semibold" style={{ color: goldSoft }}>{item.value}</div>
@@ -799,7 +985,7 @@ export default function App() {
               </div>
             </motion.div>
 
-            <FloatingCore />
+            <RealErpDashboardPreview />
           </div>
         </section>
 
@@ -807,18 +993,18 @@ export default function App() {
           <div className="grid lg:grid-cols-[0.86fr_1.14fr] gap-6 items-center">
             <div className="rounded-[30px] border border-white/20 p-8 md:p-9 bg-[rgba(244,237,226,0.92)] backdrop-blur-sm shadow-[0_16px_60px_rgba(22,37,61,0.08)]">
               <div className="text-xs uppercase tracking-[0.3em]" style={{ color: gold }}>o que é a santya</div>
-              <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight" style={{ color: textDark }}>Mais do que um programa. Uma plataforma comercial para organizar a operação inteira.</h2>
+              <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight" style={{ color: textDark }}>Mais do que CRM. Um ERP empresarial para organizar a operação inteira.</h2>
               <p className="mt-6 leading-8" style={{ color: textMuted }}>
-                A Santya é uma plataforma de gestão comercial criada para centralizar leads, tarefas, agenda, acompanhamentos, fechamentos, indicadores e comunicação operacional em um só lugar. A proposta do site é vender exatamente isso: sofisticação, completude e confiança.
+                A Santya é uma Plataforma ERP Inteligente criada para centralizar gestão comercial, financeira e operacional. Leads, tarefas, contratos, clientes, recebimentos e indicadores compartilham o mesmo contexto, com uma experiência premium e simples de usar.
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 gap-4 items-center content-center self-center max-w-[720px] mx-auto">
               {[
-                { icon: Building2, title: 'Mais controle', text: 'Menos improviso e mais clareza sobre o que está acontecendo na operação.' },
-                { icon: ShieldCheck, title: 'Mais confiança', text: 'Estrutura profissional com cara de software robusto e premium.' },
-                { icon: BrainCircuit, title: 'Mais inteligência', text: 'Narrativa visual de IA, automação e performance para valor percebido maior.' },
-                { icon: LayoutDashboard, title: 'Mais visão', text: 'Diretoria e gestores com leitura clara da operação e dos próximos passos.' },
+                { icon: Building2, title: 'Mais controle', text: 'Comercial, contratos, clientes e financeiro conectados na mesma operação.' },
+                { icon: ShieldCheck, title: 'Mais confiança', text: 'Permissões, histórico e processos organizados para trabalhar com segurança.' },
+                { icon: BrainCircuit, title: 'Mais inteligência', text: 'Automações e informação contextual para reduzir trabalho manual.' },
+                { icon: LayoutDashboard, title: 'Mais visão', text: 'Gestores e diretoria acompanham indicadores e próximos passos em tempo real.' },
               ].map((item) => {
                 const Icon = item.icon;
                 return (
@@ -835,13 +1021,45 @@ export default function App() {
           </div>
         </section>
 
+        <section id="erp-completo" className="max-w-7xl mx-auto px-4 md:px-6 py-10 md:py-20 text-white">
+          <div className="rounded-[34px] border border-white/15 p-7 md:p-10 shadow-[0_22px_70px_rgba(22,37,61,0.14)]" style={{ background: 'linear-gradient(145deg, rgba(22,37,61,0.96), rgba(43,65,100,0.94))' }}>
+            <div className="grid lg:grid-cols-[0.78fr_1.22fr] gap-7 lg:gap-12 items-end">
+              <div>
+                <div className="text-xs uppercase tracking-[0.3em]" style={{ color: goldSoft }}>Operação integrada</div>
+                <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight">ERP completo, não apenas CRM</h2>
+              </div>
+              <p className="text-white/78 leading-8">
+                A Santya conecta comercial, contratos, clientes, financeiro e diretoria em uma única plataforma. O time acompanha leads, agenda e tarefas; a gestão acompanha metas, fechamentos e performance; o financeiro controla boletos, baixas, vencimentos e inadimplência.
+              </p>
+            </div>
+
+            <div className="mt-9 grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
+              {[
+                { icon: Users2, title: 'Comercial', text: 'CRM, agenda, tarefas e fechamentos.' },
+                { icon: FileSignature, title: 'Contratos', text: 'Contratos, assinaturas, documentos e pendências.' },
+                { icon: CircleDollarSign, title: 'Financeiro', text: 'Boletos, contas a receber, baixas e inadimplência.' },
+                { icon: ChartNoAxesCombined, title: 'Gestão', text: 'Metas, diretoria, BI, ranking e indicadores.' },
+              ].map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div key={item.title} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.42, delay: idx * 0.06 }} className="rounded-[24px] border border-white/10 bg-white/[0.07] p-6">
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center" style={{ background: 'rgba(217,161,91,0.16)', color: goldSoft }}><Icon size={22} /></div>
+                    <h3 className="mt-5 text-xl font-semibold">{item.title}</h3>
+                    <p className="mt-3 text-sm leading-7 text-white/72">{item.text}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         <section id="plataforma" className="max-w-7xl mx-auto px-4 md:px-6 py-16 md:py-24 text-white">
           <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
             <div>
-              <div className="text-xs uppercase tracking-[0.3em]" style={{ color: gold }}>Sistema comercial completo</div>
-              <h2 className="mt-4 text-3xl md:text-5xl font-semibold max-w-4xl text-white">Tudo que a operação comercial precisa, em um só sistema.</h2>
+              <div className="text-xs uppercase tracking-[0.3em]" style={{ color: gold }}>Plataforma ERP Inteligente</div>
+              <h2 className="mt-4 text-3xl md:text-5xl font-semibold max-w-4xl text-white">Tudo que a operação precisa, conectado em um só ERP.</h2>
             </div>
-            <p className="max-w-2xl leading-7 text-white/78">Da entrada do lead ao fechamento, com acompanhamento diário, histórico, notificações, visão estratégica e uma apresentação visual muito mais forte para converter empresas interessadas.</p>
+            <p className="max-w-2xl leading-7 text-white/78">Do primeiro contato à assinatura, do boleto à baixa, com histórico, automações e diretoria em tempo real para conduzir a empresa com mais clareza.</p>
           </div>
 
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-5 items-stretch auto-rows-fr">
@@ -865,97 +1083,85 @@ export default function App() {
           </div>
         </section>
 
-        <section id="recursos" className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-20 text-white">
-          <div className="grid xl:grid-cols-[0.38fr_0.62fr] gap-5 items-stretch">
-            <div className="rounded-[30px] border border-white/20 p-5 md:p-7 backdrop-blur-sm shadow-[0_20px_65px_rgba(22,37,61,0.08)]" style={{ background: 'linear-gradient(160deg, rgba(217,161,91,0.20), rgba(244,237,226,0.13), rgba(255,255,255,0.04))' }}>
+        <section id="recursos" className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-20 text-white" onMouseEnter={() => setResourceHoverPaused(true)} onMouseLeave={() => setResourceHoverPaused(false)}>
+          <div className="grid min-w-0 items-stretch gap-6 lg:grid-cols-[0.42fr_0.58fr]">
+            <div className="flex min-w-0 flex-col overflow-hidden rounded-[30px] border border-white/20 p-6 md:p-7 lg:h-[620px] xl:h-[590px] backdrop-blur-sm shadow-[0_20px_65px_rgba(22,37,61,0.08)]" style={{ background: 'linear-gradient(160deg, rgba(217,161,91,0.20), rgba(244,237,226,0.13), rgba(255,255,255,0.04))' }}>
               <div className="inline-flex items-center gap-2 rounded-full border border-white/15 px-4 py-2 text-xs uppercase tracking-[0.24em] text-white/82"><Sparkles size={14} style={{ color: goldSoft }} /> núcleo de valor</div>
-              <h2 className="mt-5 text-[30px] md:text-[36px] font-semibold leading-[1.08] text-white max-w-[11ch]">Um núcleo que se mexe e explica o seu sistema do jeito certo.</h2>
-              <p className="mt-4 text-white/78 leading-7 max-w-xl">Os módulos se destacam sozinhos e, quando a pessoa clicar em um item, o automático pausa para mostrar exatamente aquele conteúdo.</p>
-              <div className="mt-7 grid gap-3">
-                {['Operação comercial centralizada', 'Notificações e alertas na hora certa', 'Visão para gestores e diretoria', 'Experiência moderna em PC e celular'].map((label) => (
-                  <div key={label} className="rounded-[20px] border border-white/10 bg-white/[0.05] px-5 py-4 text-white/82">{label}</div>
-                ))}
+              <h2 className="mt-4 text-[29px] font-semibold leading-[1.08] text-white md:text-[34px]">Módulos que trabalham juntos, com visão de ponta a ponta.</h2>
+              <p className="mt-4 max-w-xl leading-7 text-white/78">A Santya conecta comercial, contratos, clientes, financeiro e diretoria em uma única plataforma.</p>
+
+              <div ref={moduleListRef} className="santya-module-list mt-5 flex min-w-0 gap-2 overflow-x-auto pb-2 lg:grid lg:h-[230px] lg:grid-cols-1 lg:auto-rows-[40px] lg:overflow-x-hidden lg:overflow-y-auto lg:pr-2 lg:pb-0">
+                {featureDetails.map((item, index) => {
+                  const Icon = item.icon;
+                  const isActive = resourceActive === index;
+                  return (
+                    <button
+                      ref={(element) => { moduleItemRefs.current[index] = element; }}
+                      id={`resource-${index}`}
+                      key={item.title}
+                      onClick={() => {
+                        setResourceActive(index);
+                        setResourceLocked(true);
+                      }}
+                      className={`flex h-10 min-w-[164px] items-center gap-2.5 overflow-hidden rounded-[13px] border px-3 text-left transition-colors duration-300 lg:min-w-0 lg:w-full ${isActive ? 'border-[rgba(217,161,91,0.58)] bg-[rgba(255,248,240,0.14)] text-white shadow-[0_8px_22px_rgba(0,0,0,0.12)]' : 'border-white/10 bg-white/[0.05] text-white/68 hover:border-white/20 hover:bg-white/[0.08]'}`}
+                    >
+                      <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[9px]" style={{ background: isActive ? 'rgba(217,161,91,0.18)' : 'rgba(255,255,255,0.06)', color: isActive ? goldSoft : '#CBD5E1' }}><Icon size={14} /></span>
+                      <span className="min-w-0 truncate text-[12px] font-semibold">{item.title}</span>
+                    </button>
+                  );
+                })}
               </div>
-              <div className="mt-7 flex flex-wrap gap-3">
-                <Button className="rounded-2xl text-[#1b1205] font-semibold" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('demonstracao')}>
-                  Solicitar demonstração
-                </Button>
-                <Button variant="outline" className="rounded-2xl border-white/20 bg-white/5 text-white hover:bg-white/10" onClick={() => scrollToId('solucoes')}>
-                  Ver aplicações
-                </Button>
-              </div>
+
             </div>
 
-            <div className="grid gap-6">
-              <div className="grid md:grid-cols-[0.92fr_1.08fr] gap-5 items-stretch">
-                <div className="rounded-[30px] border border-white/15 bg-[rgba(32,50,78,0.52)] p-4 md:p-5 order-2 xl:order-1 backdrop-blur-sm shadow-[0_18px_50px_rgba(22,37,61,0.12)]">
-                  <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                    {featureDetails.map((item, index) => {
-                      const Icon = item.icon;
-                      const isActive = resourceActive === index;
-                      return (
-                        <button
-                          id={`resource-${index}`}
-                          key={item.eyebrow}
-                          onClick={() => {
-                            setResourceActive(index);
-                            setResourceLocked(true);
-                          }}
-                          className={`text-left rounded-[22px] border p-4 transition-all duration-300 min-h-[92px] ${isActive ? 'border-[rgba(217,161,91,0.45)] bg-[rgba(255,248,240,0.14)] shadow-[0_10px_28px_rgba(0,0,0,0.12)]' : 'border-white/10 bg-[rgba(255,248,240,0.07)] hover:bg-[rgba(255,248,240,0.10)]'}`}
-                        >
-                          <div className="flex items-start gap-3">
-                            <div className="mt-0.5 w-11 h-11 rounded-2xl flex items-center justify-center shrink-0" style={{ background: isActive ? 'rgba(217,161,91,0.18)' : 'rgba(255,255,255,0.07)', color: isActive ? goldSoft : '#D6DEE9' }}>
-                              <Icon size={20} />
-                            </div>
-                            <div>
-                              <div className="text-[11px] uppercase tracking-[0.22em]" style={{ color: isActive ? goldSoft : 'rgba(255,255,255,0.55)' }}>{item.eyebrow}</div>
-                              <div className="mt-2 text-lg font-semibold text-white leading-snug">{item.title}</div>
-                              {isActive && <div className="mt-2 text-sm text-white/72 leading-6">{item.text}</div>}
-                            </div>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+            <AnimatePresence mode="wait">
+              <motion.div key={activeFeature.title} initial={{ opacity: 0, x: 14 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }} transition={{ duration: 0.28 }} className="min-w-0 lg:h-[620px] xl:h-[590px]">
+                <Card className="min-w-0 overflow-hidden rounded-[30px] border border-white/15 bg-[rgba(32,50,78,0.68)] p-7 md:p-8 lg:h-full backdrop-blur-sm shadow-[0_20px_60px_rgba(22,37,61,0.14)]">
+                  <CardContent className="flex min-w-0 flex-col p-0 lg:h-full">
+                    <div className="flex min-w-0 items-start gap-5">
+                      <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-[20px]" style={{ background: 'rgba(217,161,91,0.16)', color: goldSoft }}>
+                        <ActiveFeatureIcon size={27} />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="text-[10px] font-semibold uppercase tracking-[0.28em]" style={{ color: goldSoft }}>{activeFeature.eyebrow}</div>
+                        <h3 className="mt-2 break-words text-[28px] font-semibold leading-tight text-white md:text-[38px]">{activeFeature.title}</h3>
+                      </div>
+                    </div>
 
-                <AnimatePresence mode="wait">
-                  <motion.div className="order-1 xl:order-2" key={activeFeature.eyebrow} initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.28 }}>
-                    <Card className="h-full rounded-[28px] border border-white/15 bg-[rgba(32,50,78,0.62)] p-5 md:p-7 backdrop-blur-sm shadow-[0_18px_50px_rgba(22,37,61,0.12)] overflow-hidden">
-                      <CardContent className="p-0 h-full flex flex-col">
-                        <div className="w-14 h-14 rounded-[20px] flex items-center justify-center" style={{ background: 'rgba(217,161,91,0.16)', color: goldSoft }}>
-                          <ActiveFeatureIcon size={24} />
-                        </div>
-                        <div className="mt-5 text-xs uppercase tracking-[0.3em]" style={{ color: goldSoft }}>{activeFeature.eyebrow}</div>
-                        <h3 className="mt-4 text-[28px] md:text-[34px] font-semibold leading-[1.08] text-white max-w-[15ch]">{activeFeature.title}</h3>
-                        <p className="mt-5 text-white/80 leading-8 max-w-2xl">{activeFeature.text}</p>
+                    <div className="mt-6 text-[19px] font-medium leading-snug text-white/92 md:text-[22px]">{activeFeature.detailTitle}</div>
+                    <p className="mt-4 max-w-3xl break-words text-base leading-7 text-white/76">{activeFeature.text}</p>
 
-                        <div className="mt-8 grid sm:grid-cols-3 gap-3">
-                          {activeFeature.bullets.map((bullet) => (
-                            <div key={bullet} className="rounded-[18px] border border-white/10 bg-white/[0.06] px-4 py-4 text-sm text-white/82 leading-6">
-                              {bullet}
+                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                      {activeFeature.bullets.map((bullet) => (
+                        <div key={bullet} className="min-w-0 overflow-hidden rounded-[16px] border border-white/10 bg-white/[0.06] px-4 py-3 text-sm leading-6 text-white/82 break-words">
+                          {bullet}
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="mt-6 rounded-[20px] border border-white/10 bg-[rgba(22,37,61,0.28)] p-4">
+                      <div className="text-[9px] font-semibold uppercase tracking-[0.24em] text-white/48">Fluxo conectado</div>
+                      <div className="mt-3 grid min-w-0 grid-cols-[1fr_auto_1fr_auto_1fr] items-center gap-2">
+                        {activeFeature.flow.map((step, index) => (
+                          <React.Fragment key={step}>
+                            <div className="min-w-0 rounded-[13px] border border-white/10 bg-white/[0.06] px-3 py-3 text-center text-[12px] font-medium leading-5 text-white/84 break-words">
+                              {step}
                             </div>
-                          ))}
-                        </div>
+                            {index < activeFeature.flow.length - 1 && <ChevronRight size={15} className="shrink-0 text-[#D9A15B]" />}
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
 
-                        <div className="mt-auto pt-8 flex flex-wrap gap-3">
-                          {!resourceLocked ? (
-                            <div className="rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-sm text-white/72">Rodando automaticamente pelos módulos</div>
-                          ) : (
-                            <Button variant="outline" className="rounded-2xl border-white/20 bg-white/5 text-white hover:bg-white/10" onClick={() => setResourceLocked(false)}>
-                              Voltar ao automático
-                            </Button>
-                          )}
-                          <Button className="rounded-2xl text-[#1b1205] font-semibold" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('demonstracao')}>
-                            Quero ver isso em ação
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </AnimatePresence>
-              </div>
-            </div>
+                    <div className="mt-auto pt-5">
+                      <Button className="rounded-2xl px-6 text-[#1b1205] font-semibold" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('demonstracao')}>
+                        Ver isso em ação
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </section>
 
@@ -964,23 +1170,23 @@ export default function App() {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
               <div>
                 <div className="text-xs uppercase tracking-[0.3em]" style={{ color: goldSoft }}>Para quem é a Santya</div>
-                <h2 className="mt-4 text-3xl md:text-5xl font-semibold" style={{ color: textDark }}>Feita para empresas que precisam organizar a operação comercial.</h2>
+                <h2 className="mt-4 text-3xl md:text-5xl font-semibold" style={{ color: textDark }}>Feita para empresas que precisam controlar a operação completa.</h2>
               </div>
-              <p className="max-w-2xl leading-7" style={{ color: textMuted }}>Construtoras, imobiliárias, equipes comerciais e operações com volume de leads ganham mais organização, controle e visão estratégica.</p>
+              <p className="max-w-2xl leading-7" style={{ color: textMuted }}>Construtoras, imobiliárias e operações em crescimento ganham integração entre comercial, contratos, clientes, financeiro e diretoria.</p>
             </div>
 
             <div className="mt-10 grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
               {[
                 'Construtoras',
                 'Imobiliárias',
-                'Equipes comerciais',
-                'Operações consultivas',
-                'Empresas com volume de leads',
-                'Negócios que precisam de mais controle',
+                'Incorporadoras',
+                'Equipes comerciais e financeiras',
+                'Empresas com múltiplos processos',
+                'Negócios em crescimento',
               ].map((sector, idx) => (
                 <motion.button key={sector} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.42, delay: idx * 0.05 }} className="text-left rounded-[24px] border border-slate-200 bg-white/70 p-5 hover:border-[rgba(217,161,91,0.45)] transition" onClick={() => scrollToId('demonstracao')}>
                   <div className="text-lg font-medium" style={{ color: textDark }}>{sector}</div>
-                  <div className="mt-2 text-sm leading-6" style={{ color: textMuted }}>Estrutura comercial com mais disciplina, acompanhamento e segurança para crescer.</div>
+                  <div className="mt-2 text-sm leading-6" style={{ color: textMuted }}>ERP empresarial para organizar processos, dados e decisões com mais segurança para crescer.</div>
                   <div className="mt-4 flex items-center gap-2 text-sm font-medium" style={{ color: gold }}>Saiba mais <ArrowUpRight size={15} /></div>
                 </motion.button>
               ))}
@@ -992,7 +1198,7 @@ export default function App() {
           <div className="grid lg:grid-cols-2 gap-6">
             <div className="rounded-[30px] border border-slate-200 p-8 md:p-10 backdrop-blur-sm shadow-[0_16px_55px_rgba(22,37,61,0.08)] bg-[rgba(244,237,226,0.92)]">
               <div className="text-xs uppercase tracking-[0.3em]" style={{ color: gold }}>Benefícios</div>
-              <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight" style={{ color: textDark }}>Mais organização. Mais controle. Mais resultado.</h2>
+              <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight" style={{ color: textDark }}>Controle real para uma operação que não para de crescer.</h2>
               <div className="mt-8 grid sm:grid-cols-2 gap-4">
                 {benefits.map((item) => (
                   <div key={item} className="rounded-2xl border border-slate-200 bg-white/70 p-4 leading-7" style={{ color: textMuted }}>{item}</div>
@@ -1005,10 +1211,10 @@ export default function App() {
                 <div className="text-xs uppercase tracking-[0.3em] text-white/70">Como funciona</div>
                 <div className="mt-6 grid gap-4">
                   {[
-                    { step: '1. Implantação', text: 'Configuração inicial da empresa, estrutura e usuários.' },
-                    { step: '2. Operação', text: 'Uso diário do CRM, tarefas, agenda e fluxo comercial.' },
-                    { step: '3. Automação', text: 'Notificações no sistema e alertas importantes no WhatsApp.' },
-                    { step: '4. Gestão', text: 'Acompanhamento por gestores e visão consolidada para diretoria.' },
+                    { step: '1. Estrutura', text: 'Configuração da empresa, equipes, perfis, permissões e empreendimentos.' },
+                    { step: '2. Operação', text: 'CRM, agenda, tarefas, fechamentos, contratos e clientes no dia a dia.' },
+                    { step: '3. Financeiro', text: 'Boletos, contas a receber, baixas, vencimentos e inadimplência integrados.' },
+                    { step: '4. Inteligência', text: 'Automações, alertas e diretoria em tempo real para agir com clareza.' },
                   ].map((item) => (
                     <div key={item.step} className="rounded-[22px] border border-white/15 bg-[rgba(22,37,61,0.20)] p-5">
                       <div className="font-medium" style={{ color: cream }}>{item.step}</div>
@@ -1026,8 +1232,8 @@ export default function App() {
             <div className="grid lg:grid-cols-[1fr_0.85fr]">
               <div className="p-8 md:p-12" style={{ background: 'linear-gradient(135deg, #314C74, #20324E)' }}>
                 <div className="text-xs uppercase tracking-[0.3em]" style={{ color: goldSoft }}>Demonstração</div>
-                <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight">Quer ver a Santya funcionando na prática?</h2>
-                <p className="mt-5 text-white/82 max-w-2xl leading-7">Solicite uma demonstração e conheça como a Santya pode organizar a operação comercial da sua empresa com mais controle, automação e visão estratégica.</p>
+                <h2 className="mt-4 text-3xl md:text-5xl font-semibold leading-tight">Veja como a Santya conecta sua operação na prática.</h2>
+                <p className="mt-5 text-white/82 max-w-2xl leading-7">Solicite uma demonstração da Plataforma ERP Inteligente e descubra como integrar comercial, contratos, clientes, financeiro e diretoria com mais controle, automação e visão real.</p>
                 <div className="mt-8 flex flex-wrap gap-4">
                   <Button className="rounded-2xl px-7 text-[#1b1205] font-semibold" style={{ background: `linear-gradient(135deg, ${goldSoft}, ${gold})` }} onClick={() => scrollToId('contato')}>
                     Solicitar demonstração
@@ -1039,13 +1245,14 @@ export default function App() {
               </div>
 
               <div id="contato" className="p-8 md:p-12 flex flex-col justify-center" style={{ background: slateDeep }}>
-                <div className="text-white/60 text-sm uppercase tracking-[0.24em]">Resumo comercial</div>
+                <div className="text-white/60 text-sm uppercase tracking-[0.24em]">O que você vai conhecer</div>
                 <div className="mt-6 space-y-4">
                   {[
-                    'Sistema comercial completo e premium',
-                    'CRM, agenda, tarefas, fechamentos, diretoria, notificações e PWA',
-                    'Cara de software grande com identidade própria Santya',
-                    'Pronto para vender confiança, modernidade e estrutura',
+                    'Plataforma ERP Inteligente',
+                    'CRM, agenda, tarefas, fechamentos e diretoria',
+                    'Contratos, clientes, financeiro, boletos e baixas',
+                    'Inadimplência, automações, WhatsApp, notificações e PWA',
+                    'Pronto para empresas que precisam de controle, escala e profissionalismo',
                   ].map((item) => (
                     <div key={item} className="rounded-2xl border border-white/15 bg-white/[0.04] p-4 text-white/82 leading-7">{item}</div>
                   ))}
@@ -1068,26 +1275,28 @@ export default function App() {
             <div className="grid md:grid-cols-[0.9fr_1.1fr] xl:grid-cols-[0.7fr_1.3fr] gap-10">
               <div>
                 <SantyaBrand size="md" />
-                <p className="mt-6 max-w-md leading-7" style={{ color: textMuted }}>Tecnologia, organização e resultado para a gestão comercial da sua empresa, com operação estruturada, visão estratégica e suporte humanizado.</p>
+                <div className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em]" style={{ color: gold }}>Soluções empresariais inteligentes</div>
+                <p className="mt-6 max-w-md leading-7" style={{ color: textMuted }}>Plataforma ERP Inteligente para conectar gestão comercial, financeira e operacional, com automação, diretoria em tempo real e suporte humanizado.</p>
               </div>
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 break-words">
                 <div>
                   <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Plataforma</div>
                   <div className="space-y-3 text-sm" style={{ color: textMuted }}>
                     <button className="block text-left" onClick={() => scrollToId('resource-0')}>CRM e Leads</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-2')}>Tarefas Comerciais</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-1')}>Agenda e Compromissos</button>
-                    <button className="block text-left" onClick={() => scrollToId('solucoes')}>Fechamentos</button>
-                    <button className="block text-left" onClick={() => scrollToId('resource-3')}>Painel da Diretoria</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-1')}>Agenda e Tarefas</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-2')}>Fechamentos</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-3')}>Contratos e Assinaturas</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-5')}>Financeiro</button>
                   </div>
                 </div>
                 <div>
                   <div className="text-sm font-semibold mb-4" style={{ color: textDark }}>Recursos</div>
                   <div className="space-y-3 text-sm" style={{ color: textMuted }}>
-                    <button className="block text-left" onClick={() => scrollToId('beneficios')}>Notificações no Sistema</button>
-                    <button className="block text-left" onClick={() => scrollToId('contato')}>Alertas no WhatsApp</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-4')}>Clientes</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-6')}>Boletos e Baixas</button>
+                    <button className="block text-left" onClick={() => scrollToId('resource-7')}>Inadimplência</button>
+                    <button className="block text-left" onClick={() => scrollToId('beneficios')}>Automações e WhatsApp</button>
                     <button className="block text-left" onClick={() => scrollToId('beneficios')}>PWA para PC e Celular</button>
-                    <button className="block text-left" onClick={() => scrollToId('demonstracao')}>Suporte Humanizado</button>
                   </div>
                 </div>
                 <div>
