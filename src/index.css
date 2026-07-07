@@ -11,6 +11,11 @@ body {
   min-width: 320px;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background: #f4ede2;
+  overflow-x: hidden;
+}
+
+#root {
+  overflow-x: hidden;
 }
 
 * {
@@ -22,18 +27,20 @@ button {
 }
 
 .santya-erp-scroll {
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: #cbd5e1 transparent;
-  overscroll-behavior: contain;
+  scrollbar-color: rgba(32, 50, 78, 0.25) transparent;
+  overscroll-behavior-x: contain;
+  overscroll-behavior-y: none;
 }
 
 .santya-erp-scroll::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 .santya-erp-scroll::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
+  background: rgba(32, 50, 78, 0.25);
   border-radius: 999px;
 }
 
@@ -61,8 +68,28 @@ button {
   background: transparent;
 }
 
+@keyframes santya-module-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+.santya-module-progress {
+  background: linear-gradient(90deg, #b8742a, #e7b979);
+  transform-origin: left center;
+  animation: santya-module-progress 3s linear forwards;
+}
+
+.santya-module-progress.is-paused {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+
+  .santya-module-progress {
+    animation: none;
+    transform: scaleX(1);
   }
 }
