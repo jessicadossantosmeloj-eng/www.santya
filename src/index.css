@@ -93,3 +93,50 @@ button {
     transform: scaleX(1);
   }
 }
+
+/* SantyaTech: movimentos leves, constantes e acelerados por GPU.
+   Evita animações por layout e respeita acessibilidade. */
+@keyframes santya-hero-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -7px, 0); }
+}
+@keyframes santya-badge-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, 4px, 0); }
+}
+@keyframes santya-glow-breathe {
+  0%, 100% { opacity: .65; }
+  50% { opacity: 1; }
+}
+@keyframes santya-bar-breathe {
+  0%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(.93); }
+}
+.santya-hero-floating {
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: santya-hero-float 5.6s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+.santya-hero-badge {
+  will-change: transform;
+  animation: santya-badge-float 6.4s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+.santya-hero-glow {
+  will-change: opacity;
+  animation: santya-glow-breathe 7.4s ease-in-out infinite;
+}
+.santya-chart-bar {
+  transform-origin: center bottom;
+  will-change: transform;
+  animation: santya-bar-breathe 4.8s cubic-bezier(.45, 0, .55, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .santya-hero-floating,
+  .santya-hero-badge,
+  .santya-hero-glow,
+  .santya-chart-bar {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto;
+  }
+}
